@@ -11,7 +11,7 @@ function PositionPageCvCondidates() {
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
             <div className="absolute top-4 right-4 flex items-center gap-2">
                 <button className="hover:opacity-70 transition-opacity">
-                    <img src={deleteImg} alt="Delete" className="w-6 h-6" />
+                    <img src={deleteImg} alt="Delete" className="w-5 h-5" />
                 </button>
             </div>
             <div className="flex flex-col">

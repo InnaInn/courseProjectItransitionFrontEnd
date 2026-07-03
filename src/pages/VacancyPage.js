@@ -1,9 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import editImg from '../images/editIcon.png';
-import addImg from '../images/addIcon.png';
-import deleteImg from '../images/deleteIcon.png';
+import ToolBar from '../components/ToolBar';
 
 function VacanciesPage() {
     const vacancies = [
@@ -46,15 +44,7 @@ function VacanciesPage() {
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                            <button className="hover:opacity-70 transition-opacity">
-                                <img src={addImg} alt="Add" className="w-8 h-8" />
-                            </button>
-                            <button className="hover:opacity-70 transition-opacity">
-                                <img src={editImg} alt="Edit" className="w-8 h-8" />
-                            </button>
-                            <button className="hover:opacity-70 transition-opacity">
-                                <img src={deleteImg} alt="Delete" className="w-8 h-8" />
-                            </button>
+                            <ToolBar></ToolBar>
                         </div>
                         <div className="flex items-center gap-3">
                             <input
@@ -70,7 +60,6 @@ function VacanciesPage() {
                                 <tbody className="divide-y divide-gray-200">
                                     {vacancies.map((vacancy) => (
                                         <tr key={vacancy.id} className="hover:bg-gray-50 transition-colors">
-                                            {/* Чекбокс */}
                                             <td className="px-6 py-4 text-sm text-gray-700 text-left w-12">
                                                 <input
                                                     type="checkbox"

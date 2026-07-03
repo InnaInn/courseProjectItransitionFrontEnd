@@ -1,5 +1,6 @@
 import React from 'react';
 import logoImg from '../images/logo.png';
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
@@ -17,22 +18,27 @@ function Header() {
                     </a>
                     <div className="flex-grow flex justify-center">
                         <div className="flex items-center gap-10">
-                            <a href="#test1" className="text-gray-800 hover:text-gray-600 no-underline text-base font-medium transition-colors"
-                            >
-                                Main Page
-                            </a>
-                            <a
-                                href="#test2"
-                                className="text-gray-800 hover:text-gray-600 no-underline text-base font-medium transition-colors"
-                            >
-                                Profiles
-                            </a>
-                            <a
-                                href="#test3"
-                                className="text-gray-800 hover:text-gray-600 no-underline text-base font-medium transition-colors"
-                            >
+                            <Link to="/attribute-library-page" style={{ marginRight: '15px' }}>
+                                Attribute Library
+                            </Link>
+                            <Link to="/candidate-profile" style={{ marginRight: '15px' }}>
+                                Candidate Profile
+                            </Link>
+                            <Link to="/cv-generation-page" style={{ marginRight: '15px' }}>
+                                CV Generation
+                            </Link>
+                            <Link to="/position-page" style={{ marginRight: '15px' }}>
                                 Positions
-                            </a>
+                            </Link>
+                            <Link to="/recruiter-profile" style={{ marginRight: '15px' }}>
+                                Recruiter Profile
+                            </Link>
+                            <Link to="/users-table-page" style={{ marginRight: '15px' }}>
+                                Users Table
+                            </Link>
+                            <Link to="/vacancy-page" style={{ marginRight: '15px' }}>
+                                Vacancies
+                            </Link>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">

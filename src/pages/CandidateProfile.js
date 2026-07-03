@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import CandidateProfileMe from '../components/CandidateProfileMe';
 import Footer from '../components/Footer';
@@ -7,6 +8,7 @@ import CandidateProfileCVs from '../components/CandidateProfileCv';
 import CandidateProfileInfo from '../components/CandidateProfileInfo';
 
 function CandidateProfile() {
+    const { id } = useParams();
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <Header />
@@ -21,7 +23,7 @@ function CandidateProfile() {
             <div className="flex-grow container mx-auto px-4 py-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
                     <div className="flex flex-col space-y-6">
-                        <CandidateProfileMe />
+                        <CandidateProfileMe userId={id} />
                         <CandidateProfileProjects />
                     </div>
                     <div className="flex flex-col space-y-6">

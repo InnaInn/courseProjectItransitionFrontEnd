@@ -9,7 +9,7 @@ function ReceuiterProfileMe() {
                 <img
                     src={editImg}
                     alt="Edit"
-                    className="w-8 h-8"
+                    className="w-5 h-5"
                 />
             </button>
             <div className="flex flex-col">

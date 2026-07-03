@@ -1,7 +1,5 @@
 import React from 'react';
-import editImg from '../images/editIcon.png';
-import addImg from '../images/addIcon.png';
-import deleteImg from '../images/deleteIcon.png';
+import ToolBar from './ToolBar';
 
 function CandidateProfileInfo() {
     const skills = [
@@ -16,17 +14,9 @@ function CandidateProfileInfo() {
     ];
 
     return (
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl relative gap-2"> 
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl relative gap-2">
             <div className="absolute top-4 right-4 flex items-center gap-2">
-                <button className="hover:opacity-70 transition-opacity">
-                    <img src={addImg} alt="Add" className="w-6 h-6" />
-                </button>
-                <button className="hover:opacity-70 transition-opacity">
-                    <img src={editImg} alt="Edit" className="w-6 h-6" />
-                </button>
-                <button className="hover:opacity-70 transition-opacity">
-                    <img src={deleteImg} alt="Delete" className="w-6 h-6" />
-                </button>
+                <ToolBar></ToolBar>
             </div>
             <div className="flex flex-col">
                 <h2 className="text-gray-800 text-2xl font-bold mb-4 text-left">
