@@ -1,5 +1,5 @@
 import React from 'react';
-import ToolBar from './ToolBar';
+import ToolBar from '../common/ToolBar';
 
 function CandidateCVs() {
     const cvs = [

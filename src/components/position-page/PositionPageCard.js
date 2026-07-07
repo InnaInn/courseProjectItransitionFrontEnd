@@ -1,6 +1,6 @@
 import React from 'react';
-import editImg from '../images/editIcon.png';
-import deleteImg from '../images/deleteIcon.png';
+import editImg from '../../images/editIcon.png';
+import deleteImg from '../../images/deleteIcon.png';
 
 function PositionPageCard() {
     const position = {

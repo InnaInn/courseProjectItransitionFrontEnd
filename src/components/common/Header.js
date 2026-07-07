@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../images/logo.png';
+import logoImg from '../../images/logo.png';
 import { Link } from 'react-router-dom';
 
 function Header() {
@@ -28,7 +28,7 @@ function Header() {
                                 CV Generation
                             </Link>
                             <Link to="/position-page" style={{ marginRight: '15px' }}>
-                                Positions
+                                Position
                             </Link>
                             <Link to="/recruiter-profile" style={{ marginRight: '15px' }}>
                                 Recruiter Profile
@@ -36,8 +36,14 @@ function Header() {
                             <Link to="/users-table-page" style={{ marginRight: '15px' }}>
                                 Users Table
                             </Link>
-                            <Link to="/vacancy-page" style={{ marginRight: '15px' }}>
-                                Vacancies
+                            <Link to="/positions-table-page" style={{ marginRight: '15px' }}>
+                                Positions
+                            </Link>
+                            <Link to="/register" style={{ marginRight: '15px' }}>
+                                Register
+                            </Link>
+                            <Link to="/login" style={{ marginRight: '15px' }}>
+                                Login
                             </Link>
                         </div>
                     </div>

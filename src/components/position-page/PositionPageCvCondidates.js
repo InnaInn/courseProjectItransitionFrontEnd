@@ -1,5 +1,5 @@
 import React from 'react';
-import deleteImg from '../images/deleteIcon.png';
+import deleteImg from '../../images/deleteIcon.png';
 
 function PositionPageCvCondidates() {
     const candidates = [

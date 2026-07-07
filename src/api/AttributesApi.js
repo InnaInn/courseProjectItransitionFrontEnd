@@ -8,6 +8,14 @@ function AttributesApi({
   onToggle,
   disabled = false,
 }) {
+
+  const renderValues = (values) => {
+    if (!values || !Array.isArray(values) || values.length === 0) {
+      return '—';
+    }
+    return values.map(v => typeof v === 'string' ? v.trim() : v).join(' ');
+  };
+
   if (loading) {
     return (
       <tr>
@@ -52,16 +60,16 @@ function AttributesApi({
             />
           </td>
           <td className="px-6 py-4 text-sm text-gray-700 text-left">
-            {attr.categoryValue}
+            {attr.categoryValue || '—'}
           </td>
           <td className="px-6 py-4 text-sm text-gray-700 text-left">
-            {attr.type}
+            {attr.type || '—'}
           </td>
           <td className="px-6 py-4 text-sm text-gray-700 text-left">
-            {attr.values || '-'}
+            {renderValues(attr.values)}
           </td>
-          <td className="px-6 py-4 text-sm text-gray-500 text-left">
-            {attr.name}
+          <td className="px-6 py-4 text-sm text-gray-700 text-left">
+            {attr.name || '—'}
           </td>
         </tr>
       ))}

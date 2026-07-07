@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import editImg from '../images/editIcon.png';
-import candidatePhoto from '../images/candidatePfoto.png';
-import { useUser } from '../hooks/users/useUser';
-import { useEditProfile } from '../hooks/useEditProfile';
+import editImg from '../../images/editIcon.png';
+import candidatePhoto from '../../images/candidatePfoto.png';
+import { useUser } from '../../hooks/users/useUser';
+import { useEditProfile } from '../../hooks/useEditProfile';
 
 function CandidateProfileMe({ userId, onUserLoaded }) {
     const { user, loading, error, refetch, setUser } = useUser(userId);

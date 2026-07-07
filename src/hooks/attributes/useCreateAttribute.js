@@ -12,12 +12,18 @@ export const useCreateAttribute = (refetch) => {
     setCreateError(null);
 
     try {
+  
+      const payload = { ...attributeData };
+      if (payload.values && typeof payload.values === 'string') {
+        payload.values = payload.values.split(',').map(v => v.trim());
+      }
+
       const response = await fetch(`${API_URL}/attributes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(attributeData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {

@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import PositionPageCard from '../components/PositionPageCard';
-import PositionPageCvCondidates from '../components/PositionPageCvCondidates';
-import PositionPageAttributesLibraryAdd from '../components/PositionPageAttributesLibraryAdd';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
+import PositionPageCard from '../components/position-page/PositionPageCard';
+import PositionPageCvCondidates from '../components/position-page/PositionPageCvCondidates';
+import PositionPageAttributesLibraryAdd from '../components/position-page/PositionPageAttributesLibraryAdd';
 
 function PositionPage() {
     return (

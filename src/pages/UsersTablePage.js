@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 import UserApi from '../api/UsersApi';
 import { useUsers } from '../hooks/users/useUsers';
 import { useEditRole } from '../hooks/useEditRole';
 import { useDeleteUsers } from '../hooks/users/useDeleteUsers';
-import UsersToolbar from '../components/UsersToolBar';
-import ConfirmModal from '../components/ConfirmModal';
+import UsersToolbar from '../components/users/UsersToolBar';
+import ConfirmModal from '../components/common/ConfirmModal';
 
 
 const ALL_ROLES = [

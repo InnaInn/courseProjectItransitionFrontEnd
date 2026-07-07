@@ -1,6 +1,6 @@
 import React from 'react';
-import editImg from '../images/editIcon.png';
-import candidatePfoto from '../images/candidatePfoto.png'
+import editImg from '../../images/editIcon.png';
+import candidatePfoto from '../../images/candidatePfoto.png'
 
 function ReceuiterProfileMe() {
     return (

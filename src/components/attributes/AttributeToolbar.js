@@ -1,7 +1,7 @@
 import React from 'react';
-import addImg from '../images/addIcon.png';
-import editImg from '../images/editIcon.png';
-import deleteImg from '../images/deleteIcon.png';
+import addImg from '../../images/addIcon.png';
+import editImg from '../../images/editIcon.png';
+import deleteImg from '../../images/deleteIcon.png';
 
 const AttributeToolbar = ({
   selectedIds,

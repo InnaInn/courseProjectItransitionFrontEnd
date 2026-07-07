@@ -1,49 +1,51 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
-import AttributeToolbar from '../components/attributes/AttributeToolbar';
-import AttributesApi from '../api/AttributesApi';
+import PositionsToolbar from '../components/positions/PositionsToolbar';
+import PositionsApi from '../api/PositionsApi';
 import ConfirmModal from '../components/common/ConfirmModal';
-import CreateAttributeModal from '../components/attributes/CreateAttributeModal';
-import EditAttributeModal from '../components/attributes/EditAttributeModal';
-import { useAttributes } from '../hooks/attributes/useAttributes';
-import { useDeleteAttributes } from '../hooks/attributes/useDeleteAttributes';
-import { useCreateAttribute } from '../hooks/attributes/useCreateAttribute';
-import { useUpdateAttribute } from '../hooks/attributes/useUpdateAttribute';
+import CreatePositionModal from '../components/positions/CreatePositionModal';
+import EditPositionModal from '../components/positions/EditPositionModal';
+import { usePositions } from '../hooks/positions/usePositions';
+import { useCreatePosition } from '../hooks/positions/useCreatePosition';
+import { useUpdatePosition } from '../hooks/positions/useUpdatePosition';
+import { useDeletePosition } from '../hooks/positions/useDeletePositions';
 
-function AttributeLibraryPage() {
-  const { attributes, loading, error, refetch } = useAttributes();
+function PositionsTablePage() {
+  const { positions, loading, error, refetch } = usePositions();
   const [selectedIds, setSelectedIds] = useState([]);
+  const [filterText, setFilterText] = useState('');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [pendingDeleteIds, setPendingDeleteIds] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingAttributeId, setEditingAttributeId] = useState(null);
 
-  const { deleteAttributes, isDeleting, deleteError } = useDeleteAttributes(refetch);
-  const { createAttribute, isCreating, createError } = useCreateAttribute(refetch);
-  const { updateAttribute, isUpdating, updateError } = useUpdateAttribute(refetch);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingPositionId, setEditingPositionId] = useState(null);
+
+  const { deletePositions, isDeleting, deleteError } = useDeletePosition(refetch);
+  const { createPosition, isCreating, createError } = useCreatePosition(refetch);
+  const { updatePosition, isUpdating, updateError } = useUpdatePosition(refetch);
 
   const handleEdit = () => {
     if (selectedIds.length === 1) {
-      const attr = attributes.find((a) => a.id === selectedIds[0]);
-      if (attr) {
+      const pos = positions.find((p) => p.id === selectedIds[0]);
+      if (pos) {
         setIsEditing(true);
-        setEditingAttributeId(attr.id);
+        setEditingPositionId(pos.id);
       }
     } else {
-      alert('Please select exactly one attribute to edit.');
+      alert('Please select exactly one position to edit.');
     }
   };
 
   const handleCloseEdit = () => {
     setIsEditing(false);
-    setEditingAttributeId(null);
+    setEditingPositionId(null);
     setSelectedIds([]);
   };
 
   const handleUpdate = async (id, data) => {
-    const success = await updateAttribute(id, data);
+    const success = await updatePosition(id, data);
     if (success) handleCloseEdit();
   };
 
@@ -53,8 +55,8 @@ function AttributeLibraryPage() {
     setSelectedIds([]);
   };
 
-  const handleCreate = async (payload) => {
-    await createAttribute(payload);
+  const handleCreate = async (data) => {
+    await createPosition(data);
     handleCloseCreate();
   };
 
@@ -67,14 +69,14 @@ function AttributeLibraryPage() {
 
   const handleSelectAll = () => {
     if (isEditing) return;
-    if (selectedIds.length === attributes.length) {
+    if (selectedIds.length === positions.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(attributes.map((a) => a.id));
+      setSelectedIds(positions.map((p) => p.id));
     }
   };
 
-  const allSelected = attributes.length > 0 && selectedIds.length === attributes.length;
+  const allSelected = positions.length > 0 && selectedIds.length === positions.length;
 
   const handleDeleteClick = () => {
     setPendingDeleteIds(selectedIds);
@@ -82,7 +84,7 @@ function AttributeLibraryPage() {
   };
 
   const handleConfirmDelete = async () => {
-    const success = await deleteAttributes(pendingDeleteIds);
+    const success = await deletePositions(pendingDeleteIds);
     if (success) setSelectedIds([]);
     setDeleteModalOpen(false);
     setPendingDeleteIds([]);
@@ -98,13 +100,15 @@ function AttributeLibraryPage() {
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <AttributeToolbar
+          <PositionsToolbar
             selectedIds={selectedIds}
             onAdd={handleOpenCreate}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
             isDeleting={isDeleting}
             deleteError={deleteError}
+            filterValue={filterText}
+            onFilterChange={setFilterText}
           />
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -122,22 +126,19 @@ function AttributeLibraryPage() {
                       />
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Field Type
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Possible Values
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tags
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  <AttributesApi
-                    attributes={attributes}
+                  <PositionsApi
+                    positions={positions}
                     loading={loading}
                     error={error}
                     selectedIds={selectedIds}
@@ -154,14 +155,14 @@ function AttributeLibraryPage() {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Attributes"
-        message={`Are you sure you want to delete ${pendingDeleteIds.length} attribute(s)?`}
+        title="Delete Positions"
+        message={`Are you sure you want to delete ${pendingDeleteIds.length} position(s)?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}
       />
 
-      <CreateAttributeModal
+      <CreatePositionModal
         isOpen={isCreateModalOpen}
         onClose={handleCloseCreate}
         onCreate={handleCreate}
@@ -169,10 +170,10 @@ function AttributeLibraryPage() {
         createError={createError}
       />
 
-      <EditAttributeModal
+      <EditPositionModal
         isOpen={isEditing}
         onClose={handleCloseEdit}
-        attribute={attributes.find((a) => a.id === editingAttributeId)}
+        position={positions.find((p) => p.id === editingPositionId)}
         onUpdate={handleUpdate}
         isUpdating={isUpdating}
         updateError={updateError}
@@ -181,4 +182,4 @@ function AttributeLibraryPage() {
   );
 }
 
-export default AttributeLibraryPage;
+export default PositionsTablePage;
