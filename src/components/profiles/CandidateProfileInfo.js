@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import SkillsToolbar from '../users/SkillsToolbar';
+import SkillsToolbar from '../userAttribute/SkillsToolbar';
 import ConfirmModal from '../common/ConfirmModal';
-import CreateSkillModal from '../users/CreateSkillModal';
-import EditSkillModal from '../users/EditSkillModal'; 
+import CreateSkillModal from '../userAttribute/CreateSkillModal';
+import EditSkillModal from '../userAttribute/EditSkillModal'; 
 import { useUserAttributes } from '../../hooks/userAttributes/useUserAttributes';
 import { useDeleteUserAttribute } from '../../hooks/userAttributes/useDeleteUserAttribute';
 import { useCreateUserAttribute } from '../../hooks/userAttributes/useCreateUserAttribute';

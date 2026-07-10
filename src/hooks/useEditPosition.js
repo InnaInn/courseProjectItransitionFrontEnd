@@ -1,16 +1,15 @@
-
 import { useState } from 'react';
 import { config } from '../config.js';
 import { fetchWithSession } from './useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
-export function useEditProfile(user, setUser) {
+export function useEditPosition(position, setPosition) {
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({});
 
     const startEdit = () => {
-        setEditForm({ ...user });
+        setEditForm({ ...position });
         setIsEditing(true);
     };
 
@@ -21,32 +20,32 @@ export function useEditProfile(user, setUser) {
         }));
     };
 
-    const save = async (userId) => {
-        if (JSON.stringify(user) === JSON.stringify(editForm)) {
+    const save = async (positionId) => {
+        if (JSON.stringify(position) === JSON.stringify(editForm)) {
             cancel();
             return;
         }
 
         try {
-            const response = await fetchWithSession(`${API_URL}/users/${userId}`, {
+            const response = await fetchWithSession(`${API_URL}/position/${positionId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editForm),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to update profile');
+                throw new Error('Failed to update position');
             }
 
-            setUser(editForm);
+            setPosition(editForm);
             cancel();
 
-            console.log('Profile updated successfully');
+            console.log(' Position updated successfully');
             return true;
 
         } catch (err) {
-            alert('Error updating profile: ' + err.message);
-            console.error('Error updating profile:', err);
+            alert('Error updating position: ' + err.message);
+            console.error('Error updating position:', err);
             return false;
         }
     };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -17,7 +18,7 @@ export const useCreateUserAttribute = (refetch) => {
         setCreateError(null);
 
         try {
-            const response = await fetch(`${API_URL}/users/${userId}/attributes`, {
+            const response = await fetchWithSession(`${API_URL}/users/${userId}/attributes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

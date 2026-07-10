@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -18,7 +19,7 @@ export const useCreateAttribute = (refetch) => {
         payload.values = payload.values.split(',').map(v => v.trim());
       }
 
-      const response = await fetch(`${API_URL}/attributes`, {
+      const response = await fetchWithSession(`${API_URL}/attributes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

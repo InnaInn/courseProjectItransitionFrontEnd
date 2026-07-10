@@ -1,4 +1,5 @@
 import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import AttributeLibraryPage from './pages/AttributeLibraryPage';
 import CandidateProfile from './pages/CandidateProfile';
@@ -7,25 +8,26 @@ import PositionPage from './pages/PositionPage';
 import RecruiterProfile from './pages/RecruiterProfile';
 import UsersTablePage from './pages/UsersTablePage';
 import PositionsTablePage from './pages/PositionsTablePage';
-import RegisterPage from './pages/RegisterPage'
+import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+//import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainPage />} />
+         
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/attribute-library-page" element={<AttributeLibraryPage />} />
           <Route path="/candidate-profile/:id" element={<CandidateProfile />} />
           <Route path="/cv-generation-page" element={<CvGenerationPage />} />
-          <Route path="/position-page" element={<PositionPage />} />
+          <Route path="/position/:id" element={<PositionPage />} />
           <Route path="/recruiter-profile" element={<RecruiterProfile />} />
           <Route path="/users-table-page" element={<UsersTablePage />} />
           <Route path="/positions-table-page" element={<PositionsTablePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </BrowserRouter>
     </div>

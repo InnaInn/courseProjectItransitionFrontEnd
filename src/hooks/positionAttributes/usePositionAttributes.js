@@ -4,19 +4,25 @@ import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
-export const usePositions = () => {
-  const [positions, setPositions] = useState([]);
+export const usePositionAttributes = (positionId) => {
+  const [attributes, setAttributes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchPositions = async () => {
+  const fetchAttributes = async () => {
+    if (!positionId) {
+      setAttributes([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
-      const response = await fetchWithSession(`${API_URL}/position`);
+      const response = await fetchWithSession(`${API_URL}/position/${positionId}/attributes`);
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
       const data = await response.json();
-      setPositions(data);
+      setAttributes(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -25,8 +31,8 @@ export const usePositions = () => {
   };
 
   useEffect(() => {
-    fetchPositions();
-  }, []);
+    fetchAttributes();
+  }, [positionId]);
 
-  return { positions, loading, error, refetch: fetchPositions };
+  return { attributes, loading, error, refetch: fetchAttributes };
 };

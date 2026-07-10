@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -13,7 +14,7 @@ export const useDeleteProject = (refetch) => {
     setDeleteError(null);
     try {
       for (const id of ids) {
-        const response = await fetch(`${API_URL}/projects/${id}`, {
+        const response = await fetchWithSession(`${API_URL}/projects/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {

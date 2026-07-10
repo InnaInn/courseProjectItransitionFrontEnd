@@ -1,54 +1,52 @@
-
 import { useState, useEffect } from 'react';
 import { config } from '../../config.js';
 import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
-export const useUser = (userId) => {
-    const [user, setUser] = useState(null);
+export const usePosition = (positionId) => {
+    const [position, setPosition] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const fetchUser = async (id) => {
+    const fetchPosition = async (id) => {
         if (!id) {
             setLoading(false);
-            setError('ID пользователя не указан');
+            setError('ID позиции не указан');
             return;
         }
 
         setLoading(true);
         setError(null);
         try {
-            const response = await fetchWithSession(`${API_URL}/users/${id}`);
+            const response = await fetchWithSession(`${API_URL}/position/${id}`);
             if (!response.ok) {
                 if (response.status === 404) {
-                    throw new Error('Пользователь не найден');
+                    throw new Error('Позиция не найдена');
                 }
                 throw new Error(`Ошибка HTTP: ${response.status}`);
             }
-            const userData = await response.json();
-            setUser(userData);
+            const positionData = await response.json();
+            setPosition(positionData);
         } catch (err) {
             setError(err.message);
-            setUser(null);
+            setPosition(null);
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (userId) {
-            fetchUser(userId);
+        if (positionId) {
+            fetchPosition(positionId);
         }
-    }, [userId]);
+    }, [positionId]);
 
-    
     return { 
-        user, 
-        setUser,     
+        position, 
+        setPosition,     
         loading, 
         error, 
-        refetch: fetchUser 
+        refetch: fetchPosition 
     };
 };

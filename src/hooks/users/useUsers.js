@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -12,7 +13,7 @@ export const useUsers = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${API_URL}/users`);
+            const response = await fetchWithSession(`${API_URL}/users`);
             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
             const usersData = await response.json();
             setUsers(usersData);

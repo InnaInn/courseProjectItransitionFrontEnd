@@ -53,7 +53,12 @@ function PositionsApi({
             />
           </td>
           <td className="px-6 py-4 text-sm text-gray-700 text-left">
-            <Link>{pos.name}</Link>
+            <Link
+              to={`/position/${pos.id}`}
+              className="text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              {pos.name}
+            </Link>
           </td>
           <td className="px-6 py-4 text-sm text-gray-500 text-left">
             {pos.description || '-'}

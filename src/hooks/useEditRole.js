@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { config } from '../config.js';
+import { fetchWithSession } from './useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -31,7 +32,7 @@ export const useEditRole = (users, setUsers) => {
         }
 
         try {
-            const response = await fetch(`${API_URL}/users/${editingUserId}/role`, {
+            const response = await fetchWithSession(`${API_URL}/users/${editingUserId}/role`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ role: editRoleValue }),

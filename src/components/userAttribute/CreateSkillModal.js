@@ -154,7 +154,6 @@ const CreateSkillModal = ({
         );
 
       case 'One of many':
-        // Проверяем, массив это или строка
         let options = [];
         if (Array.isArray(selectedAttribute.values)) {
           options = selectedAttribute.values;

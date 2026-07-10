@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -18,7 +19,7 @@ export const useProjects = (userId) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_URL}/projects?userId=${userId}`);
+      const response = await fetchWithSession(`${API_URL}/projects?userId=${userId}`);
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
       const data = await response.json();
       setProjects(data);

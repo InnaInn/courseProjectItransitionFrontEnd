@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -18,7 +19,7 @@ export const useDeleteUsers = (refetch) => {
                 const url = `${API_URL}/users/${id}`;
                 console.log('DELETE URL:', url);
 
-                const response = await fetch(url, {
+                const response = await fetchWithSession(url, {
                     method: 'DELETE',
                 });
 

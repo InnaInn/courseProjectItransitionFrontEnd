@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { config } from '../../config.js';
+import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
@@ -12,7 +13,7 @@ export const useUpdateUserAttribute = (refetch) => {
     setUpdateError(null);
 
     try {
-      const response = await fetch(`${API_URL}/users/${userId}/attributes/${attributeId}`, {
+      const response = await fetchWithSession(`${API_URL}/users/${userId}/attributes/${attributeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
