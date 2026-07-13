@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
+import ToolBar from '../components/common/ToolBar';
 import UserApi from '../api/UsersApi';
 import { useUsers } from '../hooks/users/useUsers';
 import { useEditRole } from '../hooks/useEditRole';
 import { useDeleteUsers } from '../hooks/users/useDeleteUsers';
-import UsersToolbar from '../components/users/UsersToolBar';
 import ConfirmModal from '../components/common/ConfirmModal';
-
+import { useAuth } from '../hooks/useAuth';
 
 const ALL_ROLES = [
   { id: 'ADMIN', name: 'Admin' },
@@ -16,6 +17,9 @@ const ALL_ROLES = [
 ];
 
 function UsersTablePage() {
+  const { user } = useAuth();
+  const isRecruiter = user?.role === 'RECRUITER';
+
   const { users, loading, error, setUsers, refetch } = useUsers();
   const [selectedIds, setSelectedIds] = useState([]);
   const [filterText, setFilterText] = useState('');
@@ -32,10 +36,7 @@ function UsersTablePage() {
     cancel: cancelEdit,
   } = useEditRole(users, setUsers);
 
-
   const { deleteUsers, isDeleting, deleteError } = useDeleteUsers(refetch);
-
-
 
   const handleCancel = () => {
     cancelEdit();
@@ -47,12 +48,10 @@ function UsersTablePage() {
     setSelectedIds([]);
   };
 
-
   const handleDeleteClick = () => {
     setPendingDeleteIds(selectedIds);
     setDeleteModalOpen(true);
   };
-
 
   const handleConfirmDelete = async () => {
     const success = await deleteUsers(pendingDeleteIds);
@@ -67,7 +66,6 @@ function UsersTablePage() {
     setDeleteModalOpen(false);
     setPendingDeleteIds([]);
   };
-
 
   const handleToggleUser = (id) => {
     if (isEditing) return;
@@ -87,38 +85,136 @@ function UsersTablePage() {
 
   const allSelected = users.length > 0 && selectedIds.length === users.length;
 
+  const handleEditClick = () => {
+    if (selectedIds.length === 1) {
+      startEdit(selectedIds[0]);
+    } else {
+      alert('Please select exactly one user to edit.');
+    }
+  };
+
+  const renderUserRow = (user) => (
+    <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+      <td className="px-6 py-4 text-sm text-gray-500 text-left">
+        <Link
+          to={`/candidate-profile/${user.id}`}
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+        >
+          {user.email}
+        </Link>
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-700 text-left">
+        {ALL_ROLES.find((r) => r.id === user.roleId)?.name || user.roleId}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-700 text-left">
+        {user.firstName}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-700 text-left">
+        {user.lastName}
+      </td>
+    </tr>
+  );
+
+ 
+  const renderTableBody = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-gray-500">
+            Loading...
+          </td>
+        </tr>
+      );
+    }
+
+    if (error) {
+      return (
+        <tr>
+          <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-red-500">
+            Error: {error}
+          </td>
+        </tr>
+      );
+    }
+
+    if (!users || users.length === 0) {
+      return (
+        <tr>
+          <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-gray-500">
+            No users found
+          </td>
+        </tr>
+      );
+    }
+
+    if (isRecruiter) {
+      return users.map(renderUserRow);
+    }
+
+    return (
+      <UserApi
+        users={users}
+        selectedIds={selectedIds}
+        onToggleUser={handleToggleUser}
+        loading={loading}
+        error={error}
+        roles={ALL_ROLES}
+        isEditing={isEditing}
+        editingUserId={editingUserId}
+        editRoleValue={editRoleValue}
+        onRoleChange={changeRole}
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <UsersToolbar
-            isEditing={isEditing}
-            selectedIds={selectedIds}
-            onEdit={() => startEdit(selectedIds[0])}
-            onSave={handleSave}
-            onCancel={handleCancel}
-            filterValue={filterText}
-            onFilterChange={setFilterText}
-            onDelete={handleDeleteClick}
-            isDeleting={isDeleting}
-            deleteError={deleteError}
-          />
+          <div className="flex items-center justify-between mb-4">
+            {!isRecruiter && (
+              <ToolBar
+                isEditing={isEditing}
+                onSave={handleSave}
+                onCancel={handleCancel}
+                isSaving={false}
+                showAdd={false}
+                showEdit={!isEditing}
+                showDelete={!isEditing}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteClick}
+                isDeleting={isDeleting}
+                selectedCount={selectedIds.length}
+                deleteError={deleteError}
+              />
+            )}
+            <input
+              type="text"
+              placeholder="Filter users..."
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              disabled={isEditing || isDeleting}
+            />
+          </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        checked={allSelected}
-                        onChange={handleSelectAll}
-                        disabled={isEditing}
-                      />
-                    </th>
+                    {!isRecruiter && (
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          checked={allSelected}
+                          onChange={handleSelectAll}
+                          disabled={isEditing}
+                        />
+                      </th>
+                    )}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Email
                     </th>
@@ -134,18 +230,7 @@ function UsersTablePage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  <UserApi
-                    users={users}
-                    selectedIds={selectedIds}
-                    onToggleUser={handleToggleUser}
-                    loading={loading}
-                    error={error}
-                    roles={ALL_ROLES}
-                    isEditing={isEditing}
-                    editingUserId={editingUserId}
-                    editRoleValue={editRoleValue}
-                    onRoleChange={changeRole}
-                  />
+                  {renderTableBody()}
                 </tbody>
               </table>
             </div>

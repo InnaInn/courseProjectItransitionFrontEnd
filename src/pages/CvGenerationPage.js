@@ -21,7 +21,6 @@ function CvGenerationPage() {
                         </button>
                         <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-8 py-10">
                             <div className="flex items-center gap-8">
-                                {/* Фото */}
                                 <div className="flex-shrink-0">
                                     <img
                                         src={candidatePhoto}

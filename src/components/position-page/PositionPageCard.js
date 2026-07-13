@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import editImg from '../../images/editIcon.png';
 import deleteImg from '../../images/deleteIcon.png';
+import { useApplyToPosition } from '../../hooks/userPositions/useApplyToPosition';
+import { useAuth } from '../../hooks/useAuth';
 
-function PositionPageCard({ 
-    position, 
-    isEditing, 
-    editForm, 
-    startEdit, 
-    changeField, 
-    onSave, 
-    onCancel 
+function PositionPageCard({
+    position,
+    isEditing,
+    editForm,
+    startEdit,
+    changeField,
+    onSave,
+    onCancel,
+    isCandidate = false,
+    hasApplied = false,
+    refetchUserPositions = () => {},
 }) {
+    const { user } = useAuth();
+    const { applyToPosition, isApplying, applyError } = useApplyToPosition(refetchUserPositions);
+    const [localApplied, setLocalApplied] = useState(false);
+
     if (!position) {
         return (
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
@@ -19,18 +28,25 @@ function PositionPageCard({
         );
     }
 
-
     let tags = position.tags || position.technologies || [];
     if (typeof tags === 'string') {
         tags = tags.split(',').map(t => t.trim());
     }
 
+    const handleApply = async () => {
+        if (!user || hasApplied || localApplied) return;
+        const success = await applyToPosition(user.id, position.id);
+        if (success) {
+            setLocalApplied(true);
+        }
+    };
+
+    const isApplied = hasApplied || localApplied;
 
     if (isEditing) {
         return (
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
                 <div className="flex flex-col space-y-4">
-    
                     <div className="flex items-baseline gap-3">
                         <span className="text-gray-600 font-medium text-lg whitespace-nowrap min-w-[100px]">
                             Name *
@@ -43,8 +59,6 @@ function PositionPageCard({
                             placeholder="Enter position name"
                         />
                     </div>
-
-                
                     <div className="flex items-start gap-3">
                         <span className="text-gray-600 font-medium text-lg whitespace-nowrap min-w-[100px] pt-2">
                             Description
@@ -66,7 +80,7 @@ function PositionPageCard({
                             value={editForm.tags || ''}
                             onChange={(e) => changeField('tags', e.target.value)}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter tags separated by commas (e.g. React, TypeScript)"
+                            placeholder="Enter tags separated by commas"
                         />
                     </div>
                     <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
@@ -88,19 +102,32 @@ function PositionPageCard({
         );
     }
 
-
     return (
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
             <div className="absolute top-4 right-4 flex items-center gap-2">
-                <button onClick={startEdit} className="hover:opacity-70 transition-opacity">
-                    <img src={editImg} alt="Edit" className="w-5 h-5" />
-                </button>
+                {isCandidate ? (
+                    <button
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                            isApplied || isApplying
+                                ? 'bg-gray-400 text-white cursor-not-allowed'
+                                : 'bg-green-600 text-white hover:bg-green-700'
+                        }`}
+                        onClick={handleApply}
+                        disabled={isApplied || isApplying}
+                    >
+                        {isApplying ? 'Applying...' : isApplied ? 'Applied' : 'Apply'}
+                    </button>
+                ) : (
+                    <button onClick={startEdit} className="hover:opacity-70 transition-opacity">
+                        <img src={editImg} alt="Edit" className="w-5 h-5" />
+                    </button>
+                )}
             </div>
             <div className="flex flex-col">
-                <h2 className="text-gray-800 text-xl font-bold mb-2">
+                <h2 className="text-gray-800 text-2xl font-bold mb-2">
                     {position.name || 'Untitled Position'}
                 </h2>
-                <p className="text-gray-600 text-base text-justify leading-relaxed mb-3">
+                <p className="text-gray-600 text-lg text-justify leading-relaxed mb-3">
                     {position.description || 'No description provided'}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -117,6 +144,9 @@ function PositionPageCard({
                         <span className="text-gray-400 text-sm">N/A</span>
                     )}
                 </div>
+                {applyError && (
+                    <div className="mt-2 text-sm text-red-600">{applyError}</div>
+                )}
             </div>
         </div>
     );

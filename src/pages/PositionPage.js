@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import PositionPageCard from '../components/position-page/PositionPageCard';
@@ -7,10 +8,17 @@ import PositionPageCvCondidates from '../components/position-page/PositionPageCv
 import PositionPageAttributesLibraryAdd from '../components/position-page/PositionPageAttributesLibraryAdd';
 import { usePosition } from '../hooks/positions/usePosition';
 import { useEditPosition } from '../hooks/useEditPosition';
+import { useUserPositions } from '../hooks/userPositions/useUserPositions';
 
 function PositionPage() {
     const { id } = useParams();
+    const { user } = useAuth();
+    const isCandidate = user?.role === 'CANDIDATE';
+    const userId = user?.id;
+
     const { position, loading, error, setPosition, refetch } = usePosition(id);
+    const { positions: userPositions, refetch: refetchUserPositions } = useUserPositions(userId);
+
     const {
         isEditing,
         editForm,
@@ -30,6 +38,9 @@ function PositionPage() {
     const handleCancel = () => {
         cancel();
     };
+
+   
+    const hasApplied = isCandidate && userId && userPositions.some(p => p.positionId === id);
 
     if (loading) {
         return (
@@ -71,9 +82,9 @@ function PositionPage() {
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <Header />
             <div className="flex-grow container mx-auto px-4 py-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
-                    <div className="flex flex-col space-y-6">
-                        <div className="flex-1">
+                {isCandidate ? (
+                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-6">
+                        <div className="w-full max-w-xl">
                             <PositionPageCard
                                 position={position}
                                 isEditing={isEditing}
@@ -82,18 +93,49 @@ function PositionPage() {
                                 changeField={changeField}
                                 onSave={handleSave}
                                 onCancel={handleCancel}
+                                isCandidate={isCandidate}
+                                hasApplied={hasApplied}
+                                refetchUserPositions={refetchUserPositions}
                             />
                         </div>
-                        <div className="flex-1">
-                            <PositionPageCvCondidates positionId={id} />
+                        <div className="w-full max-w-xl">
+                            <PositionPageAttributesLibraryAdd
+                                positionId={id}
+                                isCandidate={isCandidate}
+                            />
                         </div>
                     </div>
-                    <div className="flex flex-col space-y-6">
-                        <div className="flex-1">
-                            <PositionPageAttributesLibraryAdd positionId={id}/>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
+                        <div className="flex flex-col space-y-6">
+                            <div className="flex-1">
+                                <PositionPageCard
+                                    position={position}
+                                    isEditing={isEditing}
+                                    editForm={editForm}
+                                    startEdit={startEdit}
+                                    changeField={changeField}
+                                    onSave={handleSave}
+                                    onCancel={handleCancel}
+                                    isCandidate={isCandidate}
+                                    hasApplied={false}
+                                    refetchUserPositions={refetchUserPositions}
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <PositionPageAttributesLibraryAdd
+                                    positionId={id}
+                                    isCandidate={isCandidate}
+                                />
+                            </div>
+                        </div>
+                        <div className="flex flex-col space-y-6">
+                            <div className="flex-1">
+                                <PositionPageCvCondidates positionId={id} />
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
             <Footer />
         </div>

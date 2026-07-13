@@ -12,6 +12,10 @@ export const SessionManager = {
     setUser(userData) {
         sessionStorage.setItem('user', JSON.stringify(userData));
     },
+    getUser() {
+        const user = sessionStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    },
     clearSession() {
         sessionStorage.removeItem('x-session-id');
         sessionStorage.removeItem('user');
@@ -22,15 +26,18 @@ export const useAuth = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('user');
+    const saved = SessionManager.getUser();
     if (saved) {
-      setUser(JSON.parse(saved));
+      setUser(saved);
     }
   }, []);
 
   const login = (userData, sessionId) => {
     setUser(userData);
     SessionManager.setUser(userData);
+    if (sessionId) {
+      SessionManager.setSessionId(sessionId);
+    }
   };
 
   const logout = () => {
@@ -40,7 +47,6 @@ export const useAuth = () => {
 
   return { user, login, logout };
 };
-
 
 export async function fetchWithSession(url, options = {}) {
     const sessionId = SessionManager.getSessionId();

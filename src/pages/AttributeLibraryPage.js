@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
-import AttributeToolbar from '../components/attributes/AttributeToolbar';
+import ToolBar from '../components/common/ToolBar';
 import AttributesApi from '../api/AttributesApi';
 import ConfirmModal from '../components/common/ConfirmModal';
 import CreateAttributeModal from '../components/attributes/CreateAttributeModal';
@@ -14,6 +14,7 @@ import { useUpdateAttribute } from '../hooks/attributes/useUpdateAttribute';
 function AttributeLibraryPage() {
   const { attributes, loading, error, refetch } = useAttributes();
   const [selectedIds, setSelectedIds] = useState([]);
+  const [filterText, setFilterText] = useState(''); 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [pendingDeleteIds, setPendingDeleteIds] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -98,14 +99,24 @@ function AttributeLibraryPage() {
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <AttributeToolbar
-            selectedIds={selectedIds}
-            onAdd={handleOpenCreate}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-            isDeleting={isDeleting}
-            deleteError={deleteError}
-          />
+          <div className="flex items-center justify-between mb-4">
+            <ToolBar
+              selectedCount={selectedIds.length}
+              onAdd={handleOpenCreate}
+              onEdit={handleEdit}
+              onDelete={handleDeleteClick}
+              isDeleting={isDeleting}
+              deleteError={deleteError}
+            />
+            <input
+              type="text"
+              placeholder="Filter attributes..."
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              disabled={isEditing || isDeleting}
+            />
+          </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">

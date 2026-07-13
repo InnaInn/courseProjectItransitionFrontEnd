@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
-import PositionsToolbar from '../components/positions/PositionsToolbar';
+import ToolBar from '../components/common/ToolBar';
 import PositionsApi from '../api/PositionsApi';
 import ConfirmModal from '../components/common/ConfirmModal';
 import CreatePositionModal from '../components/positions/CreatePositionModal';
@@ -10,8 +11,12 @@ import { usePositions } from '../hooks/positions/usePositions';
 import { useCreatePosition } from '../hooks/positions/useCreatePosition';
 import { useUpdatePosition } from '../hooks/positions/useUpdatePosition';
 import { useDeletePosition } from '../hooks/positions/useDeletePositions';
+import { useAuth } from '../hooks/useAuth';
 
 function PositionsTablePage() {
+  const { user } = useAuth();
+  const isCandidate = user?.role === 'CANDIDATE';
+
   const { positions, loading, error, refetch } = usePositions();
   const [selectedIds, setSelectedIds] = useState([]);
   const [filterText, setFilterText] = useState('');
@@ -95,36 +100,117 @@ function PositionsTablePage() {
     setPendingDeleteIds([]);
   };
 
+ 
+  const renderPositionRow = (pos) => (
+    <tr key={pos.id} className="hover:bg-gray-50 transition-colors">
+      <td className="px-6 py-4 text-sm text-gray-700 text-left">
+        <Link
+          to={`/position/${pos.id}`}
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+        >
+          {pos.name}
+        </Link>
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-500 text-left">
+        {pos.description || '-'}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-500 text-left">
+        N/A
+      </td>
+    </tr>
+  );
+
+ 
+  const renderTableBody = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-gray-500">
+            Loading...
+          </td>
+        </tr>
+      );
+    }
+
+    if (error) {
+      return (
+        <tr>
+          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-red-500">
+            Error: {error}
+          </td>
+        </tr>
+      );
+    }
+
+    if (!positions || positions.length === 0) {
+      return (
+        <tr>
+          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-gray-500">
+            No positions found
+          </td>
+        </tr>
+      );
+    }
+
+    if (isCandidate) {
+      return positions.map(renderPositionRow);
+    }
+
+   
+    return (
+      <PositionsApi
+        positions={positions}
+        loading={loading}
+        error={error}
+        selectedIds={selectedIds}
+        onToggle={handleToggle}
+        disabled={isEditing}
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <PositionsToolbar
-            selectedIds={selectedIds}
-            onAdd={handleOpenCreate}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-            isDeleting={isDeleting}
-            deleteError={deleteError}
-            filterValue={filterText}
-            onFilterChange={setFilterText}
-          />
+          <div className="flex items-center justify-between mb-4">
+            {!isCandidate && (
+              <ToolBar
+                selectedCount={selectedIds.length}
+                onAdd={handleOpenCreate}
+                onEdit={handleEdit}
+                onDelete={handleDeleteClick}
+                isDeleting={isDeleting}
+                deleteError={deleteError}
+              />
+            )}
+            <input
+              type="text"
+              placeholder="Filter positions..."
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              disabled={isEditing || isDeleting}
+            />
+          </div>
 
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        checked={allSelected}
-                        onChange={handleSelectAll}
-                        disabled={isEditing}
-                      />
-                    </th>
+                    {!isCandidate && (
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          checked={allSelected}
+                          onChange={handleSelectAll}
+                          disabled={isEditing}
+                        />
+                      </th>
+                    )}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
@@ -137,14 +223,7 @@ function PositionsTablePage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  <PositionsApi
-                    positions={positions}
-                    loading={loading}
-                    error={error}
-                    selectedIds={selectedIds}
-                    onToggle={handleToggle}
-                    disabled={isEditing}
-                  />
+                  {renderTableBody()}
                 </tbody>
               </table>
             </div>

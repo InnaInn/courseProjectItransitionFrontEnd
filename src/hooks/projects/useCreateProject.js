@@ -8,11 +8,11 @@ export const useCreateProject = (refetch) => {
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
 
-  const createProject = async (projectData) => {
+  const createProject = async (userId, projectData) => {
     setIsCreating(true);
     setCreateError(null);
     try {
-      const response = await fetchWithSession(`${API_URL}/projects`, {
+      const response = await fetchWithSession(`${API_URL}/users/${userId}/projects`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(projectData),

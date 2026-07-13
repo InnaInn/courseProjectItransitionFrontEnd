@@ -4,14 +4,14 @@ import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
-export const useProjects = (userId) => {
-  const [projects, setProjects] = useState([]);
+export const useUserPositions = (userId) => {
+  const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchProjects = async () => {
+  const fetchPositions = async () => {
     if (!userId) {
-      setProjects([]);
+      setPositions([]);
       setLoading(false);
       return;
     }
@@ -19,10 +19,10 @@ export const useProjects = (userId) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetchWithSession(`${API_URL}/users/${userId}/projects`);
+      const response = await fetchWithSession(`${API_URL}/users/${userId}/positions`);
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
       const data = await response.json();
-      setProjects(data);
+      setPositions(data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -31,8 +31,8 @@ export const useProjects = (userId) => {
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchPositions();
   }, [userId]);
 
-  return { projects, loading, error, refetch: fetchProjects };
+  return { positions, loading, error, refetch: fetchPositions };
 };

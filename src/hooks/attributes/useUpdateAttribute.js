@@ -12,10 +12,15 @@ export const useUpdateAttribute = (refetch) => {
     setIsUpdating(true);
     setUpdateError(null);
     try {
+      const payload = { ...attributeData };
+      if (payload.values && typeof payload.values === 'string') {
+        payload.values = payload.values.split(',').map(v => v.trim());
+      }
+
       const response = await fetchWithSession(`${API_URL}/attributes/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(attributeData),
+        body: JSON.stringify(payload),
       });
       if (!response.ok) {
         const errorText = await response.text();

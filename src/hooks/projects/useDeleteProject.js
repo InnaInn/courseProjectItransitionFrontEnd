@@ -8,18 +8,18 @@ export const useDeleteProject = (refetch) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
-  const deleteProjects = async (ids) => {
+  const deleteProjects = async (userId, ids) => {
     if (!ids || ids.length === 0) return false;
     setIsDeleting(true);
     setDeleteError(null);
     try {
-      for (const id of ids) {
-        const response = await fetchWithSession(`${API_URL}/projects/${id}`, {
+      for (const projectId of ids) {
+        const response = await fetchWithSession(`${API_URL}/users/${userId}/projects/${projectId}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`Failed to delete project ${id}: ${response.status} - ${errorText}`);
+          throw new Error(`Failed to delete project ${projectId}: ${response.status} - ${errorText}`);
         }
       }
       if (refetch) refetch();

@@ -8,11 +8,11 @@ export const useUpdateProject = (refetch) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateError, setUpdateError] = useState(null);
 
-  const updateProject = async (id, projectData) => {
+  const updateProject = async (userId, projectId, projectData) => {
     setIsUpdating(true);
     setUpdateError(null);
     try {
-      const response = await fetchWithSession(`${API_URL}/projects/${id}`, {
+      const response = await fetchWithSession(`${API_URL}/users/${userId}/projects/${projectId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(projectData),

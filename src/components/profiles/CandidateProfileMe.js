@@ -4,7 +4,7 @@ import candidatePhoto from '../../images/candidatePfoto.png';
 import { useUser } from '../../hooks/users/useUser';
 import { useEditProfile } from '../../hooks/useEditProfile';
 
-function CandidateProfileMe({ userId, onUserLoaded }) {
+function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
     const { user, loading, error, refetch, setUser } = useUser(userId);
     const {
         isEditing,
@@ -34,7 +34,7 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
 
     if (!userId) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
                 <div className="text-gray-600 text-center text-lg">
                     ID пользователя не указан
                 </div>
@@ -44,7 +44,7 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
                 <div className="flex justify-center items-center h-64">
                     <div className="text-gray-600">Loading profile...</div>
                 </div>
@@ -54,7 +54,7 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
 
     if (error) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
                 <div className="text-center">
                     <div className="text-red-600 text-lg mb-4">
                         Error: {error}
@@ -72,7 +72,7 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
 
     if (!user) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
                 <div className="text-gray-600 text-center text-lg">
                     User not found
                 </div>
@@ -82,17 +82,19 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
 
     if (!isEditing) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto relative overflow-hidden">
-                <button
-                    onClick={startEdit}
-                    className="absolute top-4 right-4 hover:opacity-70 transition-opacity"
-                >
-                    <img
-                        src={editImg}
-                        alt="Редактировать"
-                        className="w-5 h-5"
-                    />
-                </button>
+            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden">
+                {!isRecruiter && (
+                    <button
+                        onClick={startEdit}
+                        className="absolute top-4 right-4 hover:opacity-70 transition-opacity"
+                    >
+                        <img
+                            src={editImg}
+                            alt="Редактировать"
+                            className="w-5 h-5"
+                        />
+                    </button>
+                )}
                 <div className="flex flex-col">
                     <div className="flex items-start gap-6">
                         <div className="flex-shrink-0">
@@ -141,9 +143,8 @@ function CandidateProfileMe({ userId, onUserLoaded }) {
             </div>
         );
     }
-
     return (
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto relative overflow-hidden pt-16">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden pt-16">
             <div className="absolute top-4 right-4 flex gap-2">
                 <button
                     onClick={handleSave}

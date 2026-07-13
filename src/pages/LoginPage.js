@@ -37,10 +37,11 @@ function LoginPage() {
 
       login(data.user);
 
+
       if (data.user.role === 'ADMIN') {
         navigate('/users-table-page');
       } else if (data.user.role === 'RECRUITER') {
-        navigate('/positions-table-page');
+        navigate('/attribute-library-page');
       } else {
         navigate('/candidate-profile/' + data.user.id);
       }
@@ -99,9 +100,8 @@ function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-2 text-white font-medium rounded-md transition-colors ${
-                  loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                }`}
+                className={`w-full py-2 text-white font-medium rounded-md transition-colors ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
               >
                 {loading ? 'Logging in...' : 'Login'}
               </button>

@@ -1,37 +1,38 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import CandidateProfileMe from '../components/profiles/CandidateProfileMe';
 import Footer from '../components/common/Footer';
 import CandidateProfileProjects from '../components/projects/CandidateProfileProjects';
 import CandidateProfileCVs from '../components/profiles/CandidateProfileCv';
 import CandidateProfileInfo from '../components/profiles/CandidateProfileInfo';
-import UserInfo from '../components/common/UserInfo';
 
 function CandidateProfile() {
     const { id } = useParams();
-    const [userName, setUserName] = useState({ firstName: '', lastName: '' });
-
-  
-    const handleUserLoaded = useCallback((firstName, lastName) => {
-        setUserName({ firstName, lastName });
-    }, []); 
+    const { user } = useAuth();
+    const isRecruiter = user?.role === 'RECRUITER';
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <Header />
-            <div className="container mx-auto px-4 py-4">
-                <UserInfo firstName={userName.firstName} lastName={userName.lastName} />
-            </div>
-
             <div className="flex-grow container mx-auto px-4 py-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
                     <div className="flex flex-col space-y-6">
-                        <CandidateProfileMe userId={id} onUserLoaded={handleUserLoaded} />
-                        <CandidateProfileProjects userId={id} />
+                        <CandidateProfileMe
+                            userId={id}
+                            isRecruiter={isRecruiter}
+                        />
+                        <CandidateProfileProjects
+                            userId={id}
+                            isRecruiter={isRecruiter}
+                        />
                     </div>
                     <div className="flex flex-col space-y-6">
-                        <CandidateProfileInfo userId={id} />
+                        <CandidateProfileInfo
+                            userId={id}
+                            isRecruiter={isRecruiter}
+                        />
                         <CandidateProfileCVs />
                     </div>
                 </div>
