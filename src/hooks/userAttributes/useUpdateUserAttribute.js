@@ -13,13 +13,30 @@ export const useUpdateUserAttribute = (refetch) => {
     setUpdateError(null);
 
     try {
-      const response = await fetchWithSession(`${API_URL}/users/${userId}/attributes/${attributeId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ value }),
-      });
+      const checkResponse = await fetchWithSession(`${API_URL}/users/${userId}/attributes`);
+      const userAttributes = await checkResponse.json();
+      const hasAttribute = userAttributes.some(attr => attr.id === attributeId);
+
+      let response;
+
+      if (hasAttribute) {
+        response = await fetchWithSession(`${API_URL}/users/${userId}/attributes/${attributeId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ value }),
+        });
+      } else {
+        
+        response = await fetchWithSession(`${API_URL}/users/${userId}/attributes`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ attributeId, value }),
+        });
+      }
 
       if (!response.ok) {
         const errorText = await response.text();

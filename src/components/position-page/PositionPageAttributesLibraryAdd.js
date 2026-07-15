@@ -105,8 +105,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
                 <h2 className="text-gray-800 text-2xl font-bold mb-2 text-left">
                     Requirements:
                 </h2>
-
-                {!isCandidate && (
+                {!isCandidate && attributes.length > 0 && (
                     <div className="flex items-center gap-2 mb-4">
                         <input
                             type="checkbox"

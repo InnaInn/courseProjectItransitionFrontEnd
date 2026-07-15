@@ -21,7 +21,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/attribute-library-page" element={<AttributeLibraryPage />} />
           <Route path="/candidate-profile/:id" element={<CandidateProfile />} />
-          <Route path="/cv-generation-page" element={<CvGenerationPage />} />
+          <Route path="/cv-generation-page/:id" element={<CvGenerationPage />} />
           <Route path="/position/:id" element={<PositionPage />} />
           <Route path="/users-table-page" element={<UsersTablePage />} />
           <Route path="/positions-table-page" element={<PositionsTablePage />} />

@@ -21,6 +21,13 @@ function LoginPage() {
     setLoading(true);
     setError('');
 
+  
+    if (!email.trim() || !password.trim()) {
+      setError('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetchWithSession(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -32,11 +39,16 @@ function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        if (response.status === 401) {
+          throw new Error('Invalid email or password');
+        } else if (response.status === 400) {
+          throw new Error(data.error || 'Please provide email and password');
+        } else {
+          throw new Error(data.error || 'Login failed. Please try again.');
+        }
       }
 
       login(data.user);
-
 
       if (data.user.role === 'ADMIN') {
         navigate('/users-table-page');
@@ -63,7 +75,10 @@ function LoginPage() {
             </h2>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md flex items-center gap-2">
+                <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
                 {error}
               </div>
             )}
@@ -100,8 +115,9 @@ function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-2 text-white font-medium rounded-md transition-colors ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
+                className={`w-full py-2 text-white font-medium rounded-md transition-colors ${
+                  loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                }`}
               >
                 {loading ? 'Logging in...' : 'Login'}
               </button>

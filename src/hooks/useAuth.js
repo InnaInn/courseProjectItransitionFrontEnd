@@ -70,5 +70,17 @@ export async function fetchWithSession(url, options = {}) {
         SessionManager.setSessionId(newSessionId);
     }
     
+    
+    if (response.status === 401) {
+        const currentPath = window.location.pathname;
+        const publicPaths = ['/', '/login', '/register'];
+        
+       
+        if (!publicPaths.includes(currentPath)) {
+            SessionManager.clearSession();
+            window.location.href = '/login';
+        }
+    }
+    
     return response;
 }
