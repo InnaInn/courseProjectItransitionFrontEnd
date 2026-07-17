@@ -12,17 +12,36 @@ export const useDeletePosition = (refetch) => {
     if (!ids || ids.length === 0) return false;
     setIsDeleting(true);
     setDeleteError(null);
+    
     try {
       for (const id of ids) {
         const response = await fetchWithSession(`${API_URL}/position/${id}`, {
           method: 'DELETE',
         });
+        
         if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Failed to delete position ${id}: ${response.status} - ${errorText}`);
+          let errorMessage = `Failed to delete position ${id}`;
+          
+          try {
+            const errorText = await response.text();
+            
+            if (errorText.includes('foreign key constraint') || 
+                errorText.includes('position_attributes_position_id_fkey') ||
+                errorText.includes('violates foreign key constraint')) {
+              errorMessage = 'Cannot delete: position has linked attributes. Remove attributes first.';
+            } else {
+              errorMessage = `Failed to delete position ${id}: ${response.status}`;
+            }
+          } catch (e) {
+            errorMessage = `Failed to delete position ${id}: ${response.status}`;
+          }
+          
+          throw new Error(errorMessage);
         }
       }
+      
       if (refetch) refetch();
+      setDeleteError(null);
       return true;
     } catch (err) {
       console.error('Delete error:', err);

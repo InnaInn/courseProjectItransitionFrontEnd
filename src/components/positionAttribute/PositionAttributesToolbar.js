@@ -33,7 +33,7 @@ const PositionAttributesToolbar = ({
       </button>
 
       {deleteError && (
-        <span className="text-sm text-red-500 ml-2">{deleteError}</span>
+        <span className="text-sm text-red-500 dark:text-red-400 ml-2">{deleteError}</span>
       )}
     </div>
   );

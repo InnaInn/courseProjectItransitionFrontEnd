@@ -89,22 +89,22 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl relative">
-        <div className="text-center text-gray-500">Loading skills...</div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
+        <div className="text-center text-gray-500 dark:text-gray-400">Loading skills...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl relative">
-        <div className="text-center text-red-500">Error: {error}</div>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
+        <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl relative">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
     
       {!isRecruiter && (
         <div className="absolute top-4 right-4 flex items-center gap-2">
@@ -120,24 +120,24 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
       )}
 
       <div className="flex flex-col">
-        <h2 className="text-gray-800 text-2xl font-bold mb-2 text-left">
+        <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 text-left transition-colors">
           My Skills
         </h2>
         {!isRecruiter && attributes.length > 0 && (
           <div className="flex items-center gap-2 mb-4">
             <input
               type="checkbox"
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
               checked={allSelected}
               onChange={handleSelectAll}
               disabled={isDeleting}
             />
-            <label className="text-sm text-gray-600">Select all</label>
+            <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
           </div>
         )}
 
         {attributes.length === 0 ? (
-          <p className="text-gray-500 text-center">No skills added yet</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center">No skills added yet</p>
         ) : (
           <div className="flex flex-col space-y-2">
             {attributes.map((skill) => (
@@ -145,14 +145,14 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
                 {!isRecruiter && (
                   <input
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                     checked={selectedIds.includes(skill.id)}
                     onChange={() => handleToggle(skill.id)}
                     disabled={isDeleting}
                   />
                 )}
-                <span className="text-gray-700 text-lg">
-                  {skill.name}: <span className="text-gray-500 font-bold">{skill.value}</span>
+                <span className="text-gray-700 dark:text-gray-300 text-lg transition-colors">
+                  {skill.name}: <span className="text-gray-500 dark:text-gray-400 font-bold">{skill.value}</span>
                 </span>
               </div>
             ))}
@@ -175,6 +175,7 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
         onCreate={handleCreate}
         isCreating={isCreating}
         createError={createError}
+        existingAttributes={attributes}
       />
 
       <EditSkillModal

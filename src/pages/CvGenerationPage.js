@@ -170,10 +170,10 @@ function CvGenerationPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-100 flex flex-col">
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500">Loading CV...</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">Loading CV...</div>
                 </div>
                 <Footer />
             </div>
@@ -182,10 +182,10 @@ function CvGenerationPage() {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-gray-100 flex flex-col">
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-red-500">User not found</div>
+                    <div className="text-center text-red-500 dark:text-red-400">User not found</div>
                 </div>
                 <Footer />
             </div>
@@ -193,17 +193,17 @@ function CvGenerationPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
             <Header />
 
             <div className="flex-grow container mx-auto px-4 py-6">
                 <div className="max-w-5xl mx-auto">
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden relative">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden relative transition-colors">
                         {!isRecruiter && isEditing && (
                             <div className="absolute top-4 right-4 z-20 flex gap-2">
                                 <button
                                     onClick={handleCancelProfile}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-md hover:bg-gray-100 transition-colors shadow-md border border-gray-200"
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-md border border-gray-200 dark:border-gray-600"
                                 >
                                     Cancel
                                 </button>
@@ -225,7 +225,7 @@ function CvGenerationPage() {
                                     Invite to interview
                                 </button>
                                 {showInviteMessage && (
-                                    <span className="text-sm text-green-600 font-medium animate-pulse">
+                                    <span className="text-sm text-green-600 dark:text-green-400 font-medium animate-pulse">
                                         Invitation sent!
                                     </span>
                                 )}
@@ -313,7 +313,7 @@ function CvGenerationPage() {
                                     {!isRecruiter && (
                                         <button
                                             onClick={startEdit}
-                                            className="absolute top-4 right-4 z-10 bg-white rounded-full p-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all border border-gray-200"
+                                            className="absolute top-4 right-4 z-10 bg-white dark:bg-gray-700 rounded-full p-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all border border-gray-200 dark:border-gray-600"
                                         >
                                             <img src={editImg} alt="Edit" className="w-5 h-5" />
                                         </button>
@@ -362,17 +362,17 @@ function CvGenerationPage() {
                                         <div className="mb-8">
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="w-1 h-8 bg-purple-600 rounded-full"></span>
-                                                <h2 className="text-2xl font-bold text-gray-800">Applied Position</h2>
+                                                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Applied Position</h2>
                                             </div>
-                                            <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
-                                                <h3 className="text-xl font-semibold text-gray-800">{position.name}</h3>
-                                                <p className="text-gray-600 mt-2 text-base">{position.description}</p>
+                                            <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-5 border border-purple-100 dark:border-purple-800">
+                                                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{position.name}</h3>
+                                                <p className="text-gray-600 dark:text-gray-400 mt-2 text-base">{position.description}</p>
                                                 {positionAttributes.length > 0 && (
                                                     <div className="mt-3">
-                                                        <p className="text-base font-medium text-gray-700 text-left">Requirements:</p>
+                                                        <p className="text-base font-medium text-gray-700 dark:text-gray-300 text-left">Requirements:</p>
                                                         <div className="flex flex-col space-y-1 mt-1 text-left">
                                                             {positionAttributes.map((attr) => (
-                                                                <div key={attr.id} className="text-gray-700 text-sm text-left">
+                                                                <div key={attr.id} className="text-gray-700 dark:text-gray-400 text-sm text-left">
                                                                     {attr.name}
                                                                 </div>
                                                             ))}
@@ -386,9 +386,9 @@ function CvGenerationPage() {
                                     <div className="mb-8">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                            <h2 className="text-2xl font-bold text-gray-800">About Me</h2>
+                                            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">About Me</h2>
                                         </div>
-                                        <p className="text-gray-700 text-base leading-relaxed bg-gray-50 rounded-xl p-5 border border-gray-100">
+                                        <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 border border-gray-100 dark:border-gray-600">
                                             {user.summary || 'No information about yourself has been added.'}
                                         </p>
                                     </div>
@@ -398,7 +398,7 @@ function CvGenerationPage() {
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                                    <h2 className="text-2xl font-bold text-gray-800">Position Requirements</h2>
+                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Position Requirements</h2>
                                                 </div>
                                                 {!isRecruiter && (
                                                     <ToolBar
@@ -414,47 +414,47 @@ function CvGenerationPage() {
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <input
                                                         type="checkbox"
-                                                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                                                         checked={allSkillsSelected}
                                                         onChange={handleSelectAllSkills}
                                                     />
-                                                    <label className="text-sm text-gray-600">Select all</label>
+                                                    <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
                                                 </div>
                                             )}
 
                                             {positionAttributes.length === 0 ? (
-                                                <p className="text-gray-500 text-center py-6 bg-gray-50 rounded-xl border border-gray-100">No requirements for this position</p>
+                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">No requirements for this position</p>
                                             ) : (
-                                                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 space-y-2">
+                                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 border border-gray-100 dark:border-gray-600 space-y-2">
                                                     {positionAttributes.map((attr) => {
                                                         const userValue = getUserSkillValue(attr.id);
                                                         const hasSkill = userValue !== null && userValue !== undefined && userValue !== '';
 
                                                         return (
-                                                            <div key={attr.id} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
+                                                            <div key={attr.id} className="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-gray-600 last:border-0">
                                                                 <div className="flex items-center gap-2">
                                                                     {!isRecruiter && (
                                                                         <input
                                                                             type="checkbox"
-                                                                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                                            className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                                                                             checked={selectedSkillIds.includes(attr.id)}
                                                                             onChange={() => handleToggleSkill(attr.id)}
                                                                         />
                                                                     )}
-                                                                    <span className={`text-base font-medium ${!hasSkill ? 'text-red-600' : 'text-gray-700'}`}>
+                                                                    <span className={`text-base font-medium ${!hasSkill ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'}`}>
                                                                         {attr.name}
                                                                     </span>
                                                                     {!hasSkill && (
-                                                                        <span className="text-xs text-red-500 ml-1">(missing)</span>
+                                                                        <span className="text-xs text-red-500 dark:text-red-400 ml-1">(missing)</span>
                                                                     )}
                                                                 </div>
                                                                 <div className="flex items-center gap-2">
                                                                     {hasSkill ? (
-                                                                        <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-200">
+                                                                        <span className="text-sm bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full border border-green-200 dark:border-green-700">
                                                                             {userValue}
                                                                         </span>
                                                                     ) : (
-                                                                        <span className="text-sm text-gray-400 px-3 py-1 rounded-full border border-gray-200">
+                                                                        <span className="text-sm text-gray-400 dark:text-gray-500 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-600">
                                                                             Not added
                                                                         </span>
                                                                     )}
@@ -470,7 +470,7 @@ function CvGenerationPage() {
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                                    <h2 className="text-2xl font-bold text-gray-800">Projects</h2>
+                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Projects</h2>
                                                 </div>
                                                 {!isRecruiter && (
                                                     <ToolBar
@@ -486,39 +486,39 @@ function CvGenerationPage() {
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <input
                                                         type="checkbox"
-                                                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                                                         checked={allProjectsSelected}
                                                         onChange={handleSelectAllProjects}
                                                     />
-                                                    <label className="text-sm text-gray-600">Select all</label>
+                                                    <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
                                                 </div>
                                             )}
 
                                             {projects.length === 0 ? (
-                                                <p className="text-gray-500 text-center py-6 bg-gray-50 rounded-xl border border-gray-100">No projects added yet</p>
+                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">No projects added yet</p>
                                             ) : (
                                                 <div className="space-y-4">
                                                     {projects.map((project) => (
-                                                        <div key={project.id} className="bg-gray-50 rounded-xl p-5 border border-gray-100 hover:shadow-md transition-shadow">
+                                                        <div key={project.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 border border-gray-100 dark:border-gray-600 hover:shadow-md transition-shadow">
                                                             <div className="flex items-start justify-between">
                                                                 <div className="flex items-center gap-2">
                                                                     {!isRecruiter && (
                                                                         <input
                                                                             type="checkbox"
-                                                                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                                            className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                                                                             checked={selectedProjectIds.includes(project.id)}
                                                                             onChange={() => handleToggleProject(project.id)}
                                                                         />
                                                                     )}
-                                                                    <h3 className="font-semibold text-gray-800 text-lg">{project.name}</h3>
+                                                                    <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-lg">{project.name}</h3>
                                                                 </div>
                                                                 {project.startDate && project.endDate && (
-                                                                    <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border border-gray-200 whitespace-nowrap ml-2">
+                                                                    <span className="text-xs text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-600 whitespace-nowrap ml-2">
                                                                         {project.startDate} — {project.endDate}
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <p className="text-gray-600 text-sm mt-2 leading-relaxed ml-6">
+                                                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-2 leading-relaxed ml-6">
                                                                 {project.description || 'No description provided'}
                                                             </p>
                                                         </div>

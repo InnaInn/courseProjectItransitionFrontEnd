@@ -2,28 +2,29 @@ import React from 'react';
 import addImg from '../../images/addIcon.png';
 import editImg from '../../images/editIcon.png';
 import deleteImg from '../../images/deleteIcon.png';
+import duplicateImg from '../../images/duplicate.png';
 
 const ToolBar = ({
- 
   isEditing = false,
   onSave,
   onCancel,
   isSaving = false,
 
- 
   showAdd = true,
   showEdit = true,
   showDelete = true,
+  showDuplicate = false,
   onAdd,
   onEdit,
   onDelete,
+  onDuplicate,
   isDeleting = false,
+  isDuplicating = false,
   selectedCount = 0,
 
-
   deleteError = null,
+  duplicateError = null,
 
-  
   showFilter = false,
   filterValue = '',
   onFilterChange,
@@ -32,10 +33,10 @@ const ToolBar = ({
 
   className = '',
 }) => {
-  const isEditDisabled = selectedCount !== 1 || isEditing || isDeleting;
-  const isDeleteDisabled = selectedCount === 0 || isDeleting;
+  const isEditDisabled = selectedCount !== 1 || isEditing || isDeleting || isDuplicating;
+  const isDeleteDisabled = selectedCount === 0 || isDeleting || isDuplicating;
+  const isDuplicateDisabled = selectedCount !== 1 || isEditing || isDeleting || isDuplicating;
 
- 
   if (isEditing) {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
@@ -49,17 +50,16 @@ const ToolBar = ({
         <button
           onClick={onCancel}
           disabled={isSaving}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
           Cancel
         </button>
         {deleteError && (
-          <span className="text-sm text-red-500 ml-2">{deleteError}</span>
+          <span className="text-sm text-red-500 dark:text-red-400 ml-2">{deleteError}</span>
         )}
       </div>
     );
   }
-
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
@@ -86,6 +86,19 @@ const ToolBar = ({
         </button>
       )}
 
+      {showDuplicate && (
+        <button
+          onClick={onDuplicate}
+          disabled={isDuplicateDisabled}
+          className={`hover:opacity-70 transition-opacity ${
+            isDuplicateDisabled ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          title="Duplicate selected"
+        >
+          <img src={duplicateImg} alt="Duplicate" className="w-5 h-5" />
+        </button>
+      )}
+
       {showDelete && (
         <button
           onClick={onDelete}
@@ -98,9 +111,13 @@ const ToolBar = ({
           <img src={deleteImg} alt="Delete" className="w-5 h-5" />
         </button>
       )}
-
+      
       {deleteError && (
-        <span className="text-sm text-red-500 ml-2">{deleteError}</span>
+        <span className="text-sm text-red-500 dark:text-red-400 ml-2">{deleteError}</span>
+      )}
+
+      {duplicateError && (
+        <span className="text-sm text-red-500 dark:text-red-400 ml-2">{duplicateError}</span>
       )}
 
       {showFilter && (
@@ -108,7 +125,7 @@ const ToolBar = ({
           <input
             type="text"
             placeholder={filterPlaceholder}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             value={filterValue}
             onChange={(e) => onFilterChange(e.target.value)}
             disabled={filterDisabled}

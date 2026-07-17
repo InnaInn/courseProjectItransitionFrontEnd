@@ -5,8 +5,12 @@ import AddAttributeModal from '../positionAttribute/AddAttributeModal';
 import { usePositionAttributes } from '../../hooks/positionAttributes/usePositionAttributes';
 import { useAddPositionAttribute } from '../../hooks/positionAttributes/useAddPositionAttribute';
 import { useRemovePositionAttribute } from '../../hooks/positionAttributes/useRemovePositionAttribute';
+import { useAuth } from '../../hooks/useAuth';
 
 function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
+    const { user } = useAuth();
+    const isAuthenticated = !!user;
+    
     const { attributes, loading, error, refetch } = usePositionAttributes(positionId);
     const { addPositionAttribute, isAdding, addError } = useAddPositionAttribute(refetch);
     const { removePositionAttribute, isRemoving, removeError } = useRemovePositionAttribute(refetch);
@@ -73,23 +77,23 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
-                <div className="text-center text-gray-500">Loading attributes...</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="text-center text-gray-500 dark:text-gray-400">Loading attributes...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
-                <div className="text-center text-red-500">Error: {error}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl mx-auto relative">
-            {!isCandidate && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
+            {isAuthenticated && !isCandidate && (
                 <div className="absolute top-4 right-4 flex items-center gap-2">
                     <PositionAttributesToolbar
                         selectedIds={selectedIds}
@@ -102,38 +106,38 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
             )}
 
             <div className="flex flex-col">
-                <h2 className="text-gray-800 text-2xl font-bold mb-2 text-left">
+                <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 text-left transition-colors">
                     Requirements:
                 </h2>
-                {!isCandidate && attributes.length > 0 && (
+                {isAuthenticated && !isCandidate && attributes.length > 0 && (
                     <div className="flex items-center gap-2 mb-4">
                         <input
                             type="checkbox"
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                             checked={allSelected}
                             onChange={handleSelectAll}
                             disabled={isRemoving}
                         />
-                        <label className="text-sm text-gray-600">Select all</label>
+                        <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
                     </div>
                 )}
 
                 {attributes.length === 0 ? (
-                    <p className="text-gray-500 text-center">No attributes assigned</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">No attributes assigned</p>
                 ) : (
                     <div className="flex flex-col space-y-2">
                         {attributes.map((attr) => (
                             <div key={attr.id} className="flex items-center gap-3">
-                                {!isCandidate && (
+                                {isAuthenticated && !isCandidate && (
                                     <input
                                         type="checkbox"
-                                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                                         checked={selectedIds.includes(attr.id)}
                                         onChange={() => handleToggle(attr.id)}
                                         disabled={isRemoving}
                                     />
                                 )}
-                                <span className="text-gray-700 text-lg">
+                                <span className="text-gray-700 dark:text-gray-300 text-lg transition-colors">
                                     {attr.name}
                                 </span>
                             </div>
@@ -148,6 +152,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
                 onAdd={handleAdd}
                 isAdding={isAdding}
                 addError={addError}
+                existingAttributes={attributes} 
             />
 
             <ConfirmModal

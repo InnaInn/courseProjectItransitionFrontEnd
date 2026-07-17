@@ -12,9 +12,10 @@ import { useCreateAttribute } from '../hooks/attributes/useCreateAttribute';
 import { useUpdateAttribute } from '../hooks/attributes/useUpdateAttribute';
 
 function AttributeLibraryPage() {
-  const { attributes, loading, error, refetch } = useAttributes();
+  const [filterText, setFilterText] = useState('');
+  const { attributes, loading, error, refetch } = useAttributes(filterText);
+  
   const [selectedIds, setSelectedIds] = useState([]);
-  const [filterText, setFilterText] = useState(''); 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [pendingDeleteIds, setPendingDeleteIds] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -95,7 +96,7 @@ function AttributeLibraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
@@ -107,46 +108,47 @@ function AttributeLibraryPage() {
               onDelete={handleDeleteClick}
               isDeleting={isDeleting}
               deleteError={deleteError}
+              showDuplicate={false}
             />
             <input
               type="text"
               placeholder="Filter attributes..."
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
               disabled={isEditing || isDeleting}
             />
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-colors">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-12">
                       <input
                         type="checkbox"
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                         checked={allSelected}
                         onChange={handleSelectAll}
                         disabled={isEditing}
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Field Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Possible Values
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Name
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                   <AttributesApi
                     attributes={attributes}
                     loading={loading}

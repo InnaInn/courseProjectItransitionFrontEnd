@@ -4,7 +4,7 @@ import { fetchWithSession } from '../useAuth.js';
 
 const API_URL = config.beURL + '/api';
 
-export const useAttributes = () => {
+export const useAttributes = (attributePrefix = '') => {
   const [attributes, setAttributes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,12 @@ export const useAttributes = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetchWithSession(`${API_URL}/attributes`);
+      let url = `${API_URL}/attributes`;
+      if (attributePrefix && attributePrefix.trim() !== '') {
+        url += `?attributePrefix=${encodeURIComponent(attributePrefix.trim())}`;
+      }
+      
+      const response = await fetchWithSession(url);
       if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
       const data = await response.json();
       setAttributes(data);
@@ -26,7 +31,7 @@ export const useAttributes = () => {
 
   useEffect(() => {
     fetchAttributes();
-  }, []);
+  }, [attributePrefix]); 
 
   return { attributes, loading, error, refetch: fetchAttributes };
 };

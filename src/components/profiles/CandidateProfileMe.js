@@ -34,8 +34,8 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
 
     if (!userId) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
-                <div className="text-gray-600 text-center text-lg">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden transition-colors">
+                <div className="text-gray-600 dark:text-gray-400 text-center text-lg">
                     ID пользователя не указан
                 </div>
             </div>
@@ -44,9 +44,9 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden transition-colors">
                 <div className="flex justify-center items-center h-64">
-                    <div className="text-gray-600">Loading profile...</div>
+                    <div className="text-gray-600 dark:text-gray-400">Loading profile...</div>
                 </div>
             </div>
         );
@@ -54,9 +54,9 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
 
     if (error) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden transition-colors">
                 <div className="text-center">
-                    <div className="text-red-600 text-lg mb-4">
+                    <div className="text-red-600 dark:text-red-400 text-lg mb-4">
                         Error: {error}
                     </div>
                     <button
@@ -72,8 +72,8 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
 
     if (!user) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden">
-                <div className="text-gray-600 text-center text-lg">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full overflow-hidden transition-colors">
+                <div className="text-gray-600 dark:text-gray-400 text-center text-lg">
                     User not found
                 </div>
             </div>
@@ -82,7 +82,7 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
 
     if (!isEditing) {
         return (
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden transition-colors">
                 {!isRecruiter && (
                     <button
                         onClick={startEdit}
@@ -110,31 +110,31 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
                         </div>
                         <div className="flex-grow space-y-3 min-w-0">
                             <div className="flex justify-center">
-                                <span className="text-gray-800 text-2xl font-bold break-words">
+                                <span className="text-gray-800 dark:text-gray-100 text-2xl font-bold break-words transition-colors">
                                     {user.firstName || ''} {user.lastName || ''}
                                 </span>
                             </div>
                             <div className="flex items-baseline gap-3">
-                                <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Location:</span>
-                                <span className="text-gray-800 text-lg break-words">{user.address || 'Not given'}</span>
+                                <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Location:</span>
+                                <span className="text-gray-800 dark:text-gray-100 text-lg break-words transition-colors">{user.address || 'Not given'}</span>
                             </div>
                             <div className="flex items-baseline gap-3">
-                                <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Email:</span>
-                                <span className="text-gray-800 text-lg break-words">{user.email || 'Not given'}</span>
+                                <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Email:</span>
+                                <span className="text-gray-800 dark:text-gray-100 text-lg break-words transition-colors">{user.email || 'Not given'}</span>
                             </div>
                             <div className="flex items-baseline gap-3">
-                                <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Position:</span>
-                                <span className="text-gray-800 text-lg break-words">{user.position || 'Not given'}</span>
+                                <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Position:</span>
+                                <span className="text-gray-800 dark:text-gray-100 text-lg break-words transition-colors">{user.position || 'Not given'}</span>
                             </div>
                             <div className="flex items-baseline gap-3">
-                                <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Phone:</span>
-                                <span className="text-gray-800 text-lg break-words">{user.phone || 'Not given'}</span>
+                                <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Phone:</span>
+                                <span className="text-gray-800 dark:text-gray-100 text-lg break-words transition-colors">{user.phone || 'Not given'}</span>
                             </div>
                         </div>
                     </div>
                     <div className="mt-4">
                         <div className="flex gap-3">
-                            <span className="text-gray-700 text-lg text-justify break-words">
+                            <span className="text-gray-700 dark:text-gray-300 text-lg text-justify break-words transition-colors">
                                 {user.summary || 'No information about yourself has been added.'}
                             </span>
                         </div>
@@ -144,7 +144,7 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
         );
     }
     return (
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden pt-16">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full relative overflow-hidden pt-16 transition-colors">
             <div className="absolute top-4 right-4 flex gap-2">
                 <button
                     onClick={handleSave}
@@ -154,7 +154,7 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
                 </button>
                 <button
                     onClick={handleCancel}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                     Cancel
                 </button>
@@ -177,7 +177,7 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
                             value={editForm.photoUrl || ''}
                             onChange={(e) => changeField('photoUrl', e.target.value)}
                             placeholder="Photo URL"
-                            className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-sm box-border"
+                            className="mt-2 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                         />
                     </div>
 
@@ -188,58 +188,58 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
                                 value={editForm.firstName || ''}
                                 onChange={(e) => changeField('firstName', e.target.value)}
                                 placeholder="First Name"
-                                className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                             <input
                                 type="text"
                                 value={editForm.lastName || ''}
                                 onChange={(e) => changeField('lastName', e.target.value)}
                                 placeholder="Last Name"
-                                className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                         </div>
 
                         <div className="flex items-baseline gap-3">
-                            <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Location:</span>
+                            <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Location:</span>
                             <input
                                 type="text"
                                 value={editForm.address || ''}
                                 onChange={(e) => changeField('address', e.target.value)}
                                 placeholder="Enter location"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                         </div>
 
                         <div className="flex items-baseline gap-3">
-                            <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Email:</span>
+                            <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Email:</span>
                             <input
                                 type="email"
                                 value={editForm.email || ''}
                                 onChange={(e) => changeField('email', e.target.value)}
                                 placeholder="Enter email"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                         </div>
 
                         <div className="flex items-baseline gap-3">
-                            <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Position:</span>
+                            <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Position:</span>
                             <input
                                 type="text"
                                 value={editForm.position || ''}
                                 onChange={(e) => changeField('position', e.target.value)}
                                 placeholder="Enter position"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                         </div>
 
                         <div className="flex items-baseline gap-3">
-                            <span className="text-gray-600 font-medium text-lg whitespace-nowrap">Phone:</span>
+                            <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap transition-colors">Phone:</span>
                             <input
                                 type="text"
                                 value={editForm.phone || ''}
                                 onChange={(e) => changeField('phone', e.target.value)}
                                 placeholder="Enter phone"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg box-border"
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             />
                         </div>
                     </div>
@@ -250,7 +250,7 @@ function CandidateProfileMe({ userId, onUserLoaded, isRecruiter = false }) {
                         value={editForm.summary || ''}
                         onChange={(e) => changeField('summary', e.target.value)}
                         placeholder="Enter summary about yourself"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-lg min-h-[100px] box-border"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-lg min-h-[100px] box-border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                         rows={4}
                     />
                 </div>

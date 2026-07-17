@@ -11,15 +11,18 @@ import { usePositions } from '../hooks/positions/usePositions';
 import { useCreatePosition } from '../hooks/positions/useCreatePosition';
 import { useUpdatePosition } from '../hooks/positions/useUpdatePosition';
 import { useDeletePosition } from '../hooks/positions/useDeletePositions';
+import { useDuplicatePosition } from '../hooks/positions/useDuplicatePosition';
 import { useAuth } from '../hooks/useAuth';
 
 function PositionsTablePage() {
   const { user } = useAuth();
+  const isAuthenticated = !!user;
   const isCandidate = user?.role === 'CANDIDATE';
+  const isHomePage = window.location.pathname === '/';
 
-  const { positions, loading, error, refetch } = usePositions();
-  const [selectedIds, setSelectedIds] = useState([]);
   const [filterText, setFilterText] = useState('');
+  const { positions, loading, error, refetch } = usePositions(isHomePage ? '' : filterText);
+  const [selectedIds, setSelectedIds] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [pendingDeleteIds, setPendingDeleteIds] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -30,6 +33,7 @@ function PositionsTablePage() {
   const { deletePositions, isDeleting, deleteError } = useDeletePosition(refetch);
   const { createPosition, isCreating, createError } = useCreatePosition(refetch);
   const { updatePosition, isUpdating, updateError } = useUpdatePosition(refetch);
+  const { duplicatePosition, isDuplicating, duplicateError } = useDuplicatePosition(refetch);
 
   const handleEdit = () => {
     if (selectedIds.length === 1) {
@@ -40,6 +44,18 @@ function PositionsTablePage() {
       }
     } else {
       alert('Please select exactly one position to edit.');
+    }
+  };
+
+  const handleDuplicate = async () => {
+    if (selectedIds.length === 1) {
+      const positionId = selectedIds[0];
+      const success = await duplicatePosition(positionId);
+      if (success) {
+        setSelectedIds([]);
+      }
+    } else {
+      alert('Please select exactly one position to duplicate.');
     }
   };
 
@@ -90,7 +106,12 @@ function PositionsTablePage() {
 
   const handleConfirmDelete = async () => {
     const success = await deletePositions(pendingDeleteIds);
-    if (success) setSelectedIds([]);
+    if (success) {
+      setSelectedIds([]);
+      setDeleteModalOpen(false);
+      setPendingDeleteIds([]);
+    }
+    // Если ошибка - она покажется в тулбаре, модалка закроется
     setDeleteModalOpen(false);
     setPendingDeleteIds([]);
   };
@@ -100,32 +121,30 @@ function PositionsTablePage() {
     setPendingDeleteIds([]);
   };
 
- 
   const renderPositionRow = (pos) => (
-    <tr key={pos.id} className="hover:bg-gray-50 transition-colors">
-      <td className="px-6 py-4 text-sm text-gray-700 text-left">
+    <tr key={pos.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+      <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 text-left">
         <Link
           to={`/position/${pos.id}`}
-          className="text-blue-600 hover:text-blue-800 hover:underline"
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline"
         >
           {pos.name}
         </Link>
       </td>
-      <td className="px-6 py-4 text-sm text-gray-500 text-left">
+      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 text-left">
         {pos.description || '-'}
       </td>
-      <td className="px-6 py-4 text-sm text-gray-500 text-left">
+      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 text-left">
         N/A
       </td>
     </tr>
   );
 
- 
   const renderTableBody = () => {
     if (loading) {
       return (
         <tr>
-          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-gray-500">
+          <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
             Loading...
           </td>
         </tr>
@@ -135,7 +154,7 @@ function PositionsTablePage() {
     if (error) {
       return (
         <tr>
-          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-red-500">
+          <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-red-500 dark:text-red-400">
             Error: {error}
           </td>
         </tr>
@@ -145,18 +164,21 @@ function PositionsTablePage() {
     if (!positions || positions.length === 0) {
       return (
         <tr>
-          <td colSpan={isCandidate ? 3 : 4} className="px-6 py-4 text-center text-gray-500">
+          <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
             No positions found
           </td>
         </tr>
       );
     }
 
+    if (isHomePage) {
+      return positions.map(renderPositionRow);
+    }
+
     if (isCandidate) {
       return positions.map(renderPositionRow);
     }
 
-   
     return (
       <PositionsApi
         positions={positions}
@@ -170,59 +192,71 @@ function PositionsTablePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            {!isCandidate && (
-              <ToolBar
-                selectedCount={selectedIds.length}
-                onAdd={handleOpenCreate}
-                onEdit={handleEdit}
-                onDelete={handleDeleteClick}
-                isDeleting={isDeleting}
-                deleteError={deleteError}
+          {isHomePage ? (
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                Available Jobs Today
+              </h1>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between mb-4">
+              {!isCandidate && (
+                <ToolBar
+                  selectedCount={selectedIds.length}
+                  onAdd={handleOpenCreate}
+                  onEdit={handleEdit}
+                  onDelete={handleDeleteClick}
+                  onDuplicate={handleDuplicate}
+                  showDuplicate={true}
+                  isDeleting={isDeleting}
+                  isDuplicating={isDuplicating}
+                  deleteError={deleteError}
+                  duplicateError={duplicateError}
+                />
+              )}
+              <input
+                type="text"
+                placeholder="Filter positions by name..."
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                disabled={isEditing || isDeleting || isDuplicating}
               />
-            )}
-            <input
-              type="text"
-              placeholder="Filter positions..."
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-              disabled={isEditing || isDeleting}
-            />
-          </div>
+            </div>
+          )}
 
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-colors">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                   <tr>
-                    {!isCandidate && (
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                    {!isHomePage && !isCandidate && (
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-12">
                         <input
                           type="checkbox"
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
                           checked={allSelected}
                           onChange={handleSelectAll}
-                          disabled={isEditing}
+                          disabled={isEditing || isDuplicating}
                         />
                       </th>
                     )}
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Tags
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                   {renderTableBody()}
                 </tbody>
               </table>

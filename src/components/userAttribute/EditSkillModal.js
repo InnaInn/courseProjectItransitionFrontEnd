@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import { useAttributes } from '../../hooks/attributes/useAttributes';
 
 const EditSkillModal = ({
@@ -9,11 +10,25 @@ const EditSkillModal = ({
   isUpdating,
   updateError,
 }) => {
-  const { attributes, loading: attributesLoading } = useAttributes();
+  const [searchTerm, setSearchTerm] = useState('');
+  const { attributes, loading: attributesLoading } = useAttributes(searchTerm);
+  
   const [formData, setFormData] = useState({
     attributeId: '',
     value: '',
   });
+  
+
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
+
+ 
+  const options = attributes.map((attr) => ({
+    value: String(attr.id),
+    label: `${attr.name}${attr.categoryValue ? ` (${attr.categoryValue})` : ''}`,
+  }));
+
+  
+  const selectedOption = options.find(opt => opt.value === String(formData.attributeId));
 
 
   useEffect(() => {
@@ -22,9 +37,15 @@ const EditSkillModal = ({
         attributeId: skill.attributeId || skill.id || '',
         value: skill.value || '',
       });
+      if (skill.id) {
+        const found = attributes.find(attr => String(attr.id) === String(skill.id));
+        if (found) {
+          setSelectedAttribute(found);
+          setSearchTerm(found.name);
+        }
+      }
     }
-  }, [skill]);
-
+  }, [skill, attributes]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -34,12 +55,23 @@ const EditSkillModal = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-
   useEffect(() => {
     if (!isOpen) {
       setFormData({ attributeId: '', value: '' });
+      setSearchTerm('');
+      setSelectedAttribute(null);
     }
   }, [isOpen]);
+
+ 
+  useEffect(() => {
+    if (formData.attributeId && attributes.length > 0) {
+      const found = attributes.find(attr => String(attr.id) === String(formData.attributeId));
+      if (found) {
+        setSelectedAttribute(found);
+      }
+    }
+  }, [attributes, formData.attributeId]);
 
   if (!isOpen) return null;
 
@@ -48,13 +80,30 @@ const EditSkillModal = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAttributeChange = (e) => {
-    const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      attributeId: value,
-      value: '',
-    }));
+  const handleSelectChange = (selected) => {
+    if (selected) {
+      const found = attributes.find(attr => String(attr.id) === String(selected.value));
+      if (found) {
+        setSelectedAttribute(found);
+      }
+      setFormData((prev) => ({
+        ...prev,
+        attributeId: String(selected.value),
+        value: '',
+      }));
+      setSearchTerm(selected.label);
+    } else {
+      setSelectedAttribute(null);
+      setFormData((prev) => ({
+        ...prev,
+        attributeId: '',
+        value: '',
+      }));
+    }
+  };
+
+  const handleInputChange = (inputValue) => {
+    setSearchTerm(inputValue);
   };
 
   const handleCheckboxChange = (e) => {
@@ -73,15 +122,10 @@ const EditSkillModal = ({
     if (e.target === e.currentTarget) onClose();
   };
 
-
-  const selectedAttribute = attributes.find(
-    (attr) => String(attr.id) === String(formData.attributeId)
-  );
-
   const renderValueInput = () => {
     if (!selectedAttribute) {
       return (
-        <div className="text-gray-400 text-sm italic">
+        <div className="text-gray-400 dark:text-gray-500 text-sm italic">
           Please select a skill first
         </div>
       );
@@ -97,9 +141,9 @@ const EditSkillModal = ({
               type="checkbox"
               checked={formData.value === 'true'}
               onChange={handleCheckboxChange}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
             />
-            <label className="text-sm text-gray-600">Enable this skill</label>
+            <label className="text-sm text-gray-600 dark:text-gray-400">Enable this skill</label>
           </div>
         );
 
@@ -111,7 +155,7 @@ const EditSkillModal = ({
             value={formData.value}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             placeholder="Enter number"
           />
         );
@@ -124,7 +168,7 @@ const EditSkillModal = ({
             value={formData.value}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
           />
         );
 
@@ -143,7 +187,7 @@ const EditSkillModal = ({
                   value: start ? `${start} - ${end}` : '',
                 }));
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               placeholder="Start date"
             />
             <input
@@ -157,7 +201,7 @@ const EditSkillModal = ({
                   value: start ? `${start} - ${end}` : '',
                 }));
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               placeholder="End date"
             />
           </div>
@@ -177,7 +221,7 @@ const EditSkillModal = ({
             value={formData.value}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
           >
             <option value="">Select option</option>
             {options.map((opt, i) => (
@@ -196,7 +240,7 @@ const EditSkillModal = ({
             value={formData.value}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             placeholder="Enter image URL"
           />
         );
@@ -209,7 +253,7 @@ const EditSkillModal = ({
             onChange={handleChange}
             required
             rows="3"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             placeholder="Enter text"
           />
         );
@@ -222,56 +266,156 @@ const EditSkillModal = ({
             value={formData.value}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             placeholder="Enter value"
           />
         );
     }
   };
 
+
+  const customSelectStyles = {
+    control: (base, state) => ({
+      ...base,
+      borderColor: state.isFocused ? '#3b82f6' : '#d1d5db',
+      '&:hover': { borderColor: '#3b82f6' },
+      boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.2)' : 'none',
+      backgroundColor: '#ffffff',
+      minHeight: '42px',
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+      backgroundColor: '#ffffff',
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? '#e5e7eb' : '#ffffff',
+      color: '#1f2937',
+      cursor: 'pointer',
+      padding: '8px 12px',
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: '#1f2937',
+    }),
+    input: (base) => ({
+      ...base,
+      color: '#1f2937',
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: '#9ca3af',
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      color: '#9ca3af',
+      cursor: 'pointer',
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: '#9ca3af',
+      cursor: 'pointer',
+    }),
+  };
+
+  const darkSelectStyles = {
+    control: (base, state) => ({
+      ...base,
+      borderColor: state.isFocused ? '#3b82f6' : '#4b5563',
+      '&:hover': { borderColor: '#3b82f6' },
+      boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.2)' : 'none',
+      backgroundColor: '#374151',
+      minHeight: '42px',
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+      backgroundColor: '#1f2937',
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? '#374151' : '#1f2937',
+      color: '#f3f4f6',
+      cursor: 'pointer',
+      padding: '8px 12px',
+      '&:active': {
+        backgroundColor: '#374151',
+      },
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: '#f3f4f6',
+    }),
+    input: (base) => ({
+      ...base,
+      color: '#f3f4f6',
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: '#9ca3af',
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      color: '#9ca3af',
+      cursor: 'pointer',
+      '&:hover': {
+        color: '#f3f4f6',
+      },
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: '#9ca3af',
+      cursor: 'pointer',
+      '&:hover': {
+        color: '#f3f4f6',
+      },
+    }),
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 dark:bg-opacity-60"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md transition-colors">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 text-center">
           Edit Skill
         </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Skill *
             </label>
-            {attributesLoading ? (
-              <div className="text-gray-500 text-sm">Loading skills...</div>
-            ) : (
-              <select
-                value={formData.attributeId}
-                onChange={handleAttributeChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select skill</option>
-                {attributes.map((attr) => (
-                  <option key={attr.id} value={attr.id}>
-                    {attr.name} {attr.categoryValue ? `(${attr.categoryValue})` : ''}
-                  </option>
-                ))}
-              </select>
-            )}
+            <Select
+              options={options}
+              value={selectedOption}
+              onChange={handleSelectChange}
+              onInputChange={handleInputChange}
+              placeholder="Type to search skill..."
+              isClearable
+              isLoading={attributesLoading}
+              noOptionsMessage={() => 'No skills found'}
+              styles={typeof window !== 'undefined' && document.documentElement.classList.contains('dark') 
+                ? darkSelectStyles 
+                : customSelectStyles
+              }
+            />
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              {attributes.length} skill(s) found
+            </p>
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Value {selectedAttribute ? `(${selectedAttribute.type})` : ''}
             </label>
             {renderValueInput()}
           </div>
 
           {updateError && (
-            <div className="mb-4 text-sm text-red-600">{updateError}</div>
+            <div className="mb-4 text-sm text-red-600 dark:text-red-400">{updateError}</div>
           )}
 
           <div className="flex justify-end gap-3">
@@ -279,7 +423,7 @@ const EditSkillModal = ({
               type="button"
               onClick={onClose}
               disabled={isUpdating}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>

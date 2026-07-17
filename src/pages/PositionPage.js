@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
@@ -14,7 +14,12 @@ function PositionPage() {
     const { id } = useParams();
     const { user } = useAuth();
     const isCandidate = user?.role === 'CANDIDATE';
+    const isRecruiter = user?.role === 'RECRUITER';
+    const isAdmin = user?.role === 'ADMIN';
     const userId = user?.id;
+    const isAuthenticated = !!user;
+
+    const showCandidatesList = isRecruiter || isAdmin;
 
     const { position, loading, error, setPosition, refetch } = usePosition(id);
     const { positions: userPositions, refetch: refetchUserPositions } = useUserPositions(userId);
@@ -39,15 +44,14 @@ function PositionPage() {
         cancel();
     };
 
-   
     const hasApplied = isCandidate && userId && userPositions.some(p => p.positionId === id);
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-100 flex flex-col">
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500">Loading position...</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">Loading position...</div>
                 </div>
                 <Footer />
             </div>
@@ -56,10 +60,10 @@ function PositionPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-100 flex flex-col">
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-red-500">Error: {error}</div>
+                    <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
                 </div>
                 <Footer />
             </div>
@@ -68,10 +72,10 @@ function PositionPage() {
 
     if (!position) {
         return (
-            <div className="min-h-screen bg-gray-100 flex flex-col">
+            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500">Position not found</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">Position not found</div>
                 </div>
                 <Footer />
             </div>
@@ -79,33 +83,10 @@ function PositionPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
             <Header />
             <div className="flex-grow container mx-auto px-4 py-6">
-                {isCandidate ? (
-                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-6">
-                        <div className="w-full max-w-xl">
-                            <PositionPageCard
-                                position={position}
-                                isEditing={isEditing}
-                                editForm={editForm}
-                                startEdit={startEdit}
-                                changeField={changeField}
-                                onSave={handleSave}
-                                onCancel={handleCancel}
-                                isCandidate={isCandidate}
-                                hasApplied={hasApplied}
-                                refetchUserPositions={refetchUserPositions}
-                            />
-                        </div>
-                        <div className="w-full max-w-xl">
-                            <PositionPageAttributesLibraryAdd
-                                positionId={id}
-                                isCandidate={isCandidate}
-                            />
-                        </div>
-                    </div>
-                ) : (
+                {showCandidatesList ? (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
                         <div className="flex flex-col space-y-6">
                             <div className="flex-1">
@@ -133,6 +114,41 @@ function PositionPage() {
                             <div className="flex-1">
                                 <PositionPageCvCondidates positionId={id} />
                             </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-6">
+                        {!isAuthenticated && (
+                            <div className="w-full max-w-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 text-center transition-colors">
+                                <p className="text-blue-700 dark:text-blue-300 text-base">
+                                    To apply for this position, please log in to your{' '}
+                                    <Link to="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+                                        personal account
+                                    </Link>
+                                    .
+                                </p>
+                            </div>
+                        )}
+                        
+                        <div className="w-full max-w-xl">
+                            <PositionPageCard
+                                position={position}
+                                isEditing={isEditing}
+                                editForm={editForm}
+                                startEdit={startEdit}
+                                changeField={changeField}
+                                onSave={handleSave}
+                                onCancel={handleCancel}
+                                isCandidate={isCandidate}
+                                hasApplied={hasApplied}
+                                refetchUserPositions={refetchUserPositions}
+                            />
+                        </div>
+                        <div className="w-full max-w-xl">
+                            <PositionPageAttributesLibraryAdd
+                                positionId={id}
+                                isCandidate={isCandidate}
+                            />
                         </div>
                     </div>
                 )}
