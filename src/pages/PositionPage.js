@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
@@ -11,6 +12,7 @@ import { useEditPosition } from '../hooks/useEditPosition';
 import { useUserPositions } from '../hooks/userPositions/useUserPositions';
 
 function PositionPage() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const { user } = useAuth();
     const isCandidate = user?.role === 'CANDIDATE';
@@ -51,7 +53,7 @@ function PositionPage() {
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500 dark:text-gray-400">Loading position...</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
                 </div>
                 <Footer />
             </div>
@@ -63,7 +65,7 @@ function PositionPage() {
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+                    <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
                 </div>
                 <Footer />
             </div>
@@ -75,7 +77,7 @@ function PositionPage() {
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500 dark:text-gray-400">Position not found</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">{t('positionNotFound') || 'Position not found'}</div>
                 </div>
                 <Footer />
             </div>
@@ -121,9 +123,13 @@ function PositionPage() {
                         {!isAuthenticated && (
                             <div className="w-full max-w-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 text-center transition-colors">
                                 <p className="text-blue-700 dark:text-blue-300 text-base">
-                                    To apply for this position, please log in to your{' '}
+                                    {t('toApply')}{' '}
+                                    <Link to="/register" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+                                        {t('register')}
+                                    </Link>
+                                    {' '}{t('or')}{' '}
                                     <Link to="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-                                        personal account
+                                        {t('personalAccount')}
                                     </Link>
                                     .
                                 </p>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import ToolBar from '../components/common/ToolBar';
@@ -17,6 +18,7 @@ const ALL_ROLES = [
 ];
 
 function UsersTablePage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const isRecruiter = user?.role === 'RECRUITER';
   const [filterText, setFilterText] = useState('');
@@ -88,7 +90,7 @@ function UsersTablePage() {
     if (selectedIds.length === 1) {
       startEdit(selectedIds[0]);
     } else {
-      alert('Please select exactly one user to edit.');
+      alert(t('selectExactlyOneUser') || 'Please select exactly one user to edit.');
     }
   };
 
@@ -119,7 +121,7 @@ function UsersTablePage() {
       return (
         <tr>
           <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-            Loading...
+            {t('loading')}
           </td>
         </tr>
       );
@@ -129,7 +131,7 @@ function UsersTablePage() {
       return (
         <tr>
           <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-red-500 dark:text-red-400">
-            Error: {error}
+            {t('error')}: {error}
           </td>
         </tr>
       );
@@ -139,7 +141,7 @@ function UsersTablePage() {
       return (
         <tr>
           <td colSpan={isRecruiter ? 4 : 5} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-            No users found
+            {t('noUsers') || 'No users found'}
           </td>
         </tr>
       );
@@ -189,8 +191,8 @@ function UsersTablePage() {
             )}
             <input
               type="text"
-              placeholder="Filter users by last name..."
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+              placeholder={t('filterUsers') || 'Filter users by last name...'}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
               disabled={isEditing || isDeleting}
@@ -214,16 +216,16 @@ function UsersTablePage() {
                       </th>
                     )}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Email
+                      {t('email')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Role
+                      {t('role') || 'Role'}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      First Name
+                      {t('firstName')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Last Name
+                      {t('lastName')}
                     </th>
                   </tr>
                 </thead>
@@ -239,8 +241,8 @@ function UsersTablePage() {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Users"
-        message={`Are you sure you want to delete ${pendingDeleteIds.length} user(s)?`}
+        title={t('deleteUsers') || 'Delete Users'}
+        message={`${t('confirmDelete') || 'Are you sure you want to delete'} ${pendingDeleteIds.length} ${t('userPlural') || 'user(s)'}?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}

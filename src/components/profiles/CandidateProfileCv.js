@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ToolBar from '../common/ToolBar';
 import ConfirmModal from '../common/ConfirmModal';
 import { useUserPositions } from '../../hooks/userPositions/useUserPositions';
@@ -7,6 +8,7 @@ import { useDeleteUserPosition } from '../../hooks/userPositions/useDeleteUserPo
 import { useAuth } from '../../hooks/useAuth';
 
 function CandidateProfileCv() {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const { positions, loading, error, refetch } = useUserPositions(user?.id);
     const { deleteUserPosition, isDeleting, deleteError } = useDeleteUserPosition(refetch);
@@ -66,7 +68,7 @@ function CandidateProfileCv() {
     if (loading) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">Loading applied positions...</div>
+                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
             </div>
         );
     }
@@ -74,7 +76,7 @@ function CandidateProfileCv() {
     if (error) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
-                <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+                <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
             </div>
         );
     }
@@ -94,7 +96,7 @@ function CandidateProfileCv() {
 
             <div className="flex flex-col">
                 <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-4 text-left transition-colors">
-                    My Applications
+                    {t('myApplications')}
                 </h2>
 
                 {positions.length > 0 && (
@@ -108,13 +110,13 @@ function CandidateProfileCv() {
                             id="select-all-applications"
                         />
                         <label htmlFor="select-all-applications" className="text-sm text-gray-600 dark:text-gray-400">
-                            Select all
+                            {t('selectAll')}
                         </label>
                     </div>
                 )}
 
                 {positions.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-center">No applications yet</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">{t('noApplications')}</p>
                 ) : (
                     <div className="flex flex-col space-y-2">
                         {positions.map((pos) => (
@@ -143,8 +145,8 @@ function CandidateProfileCv() {
 
             <ConfirmModal
                 isOpen={deleteModalOpen}
-                title="Delete Applications"
-                message={`Are you sure you want to withdraw ${pendingDeleteIds.length} application(s)?`}
+                title={t('deleteApplications') || 'Delete Applications'}
+                message={`${t('confirmWithdraw') || 'Are you sure you want to withdraw'} ${pendingDeleteIds.length} ${t('applicationPlural') || 'application(s)'}?`}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
                 isLoading={isDeleting}

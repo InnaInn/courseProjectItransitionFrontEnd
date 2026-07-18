@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import CandidateProfileMe from '../components/profiles/CandidateProfileMe';
@@ -9,6 +10,7 @@ import CandidateProfileCVs from '../components/profiles/CandidateProfileCv';
 import CandidateProfileInfo from '../components/profiles/CandidateProfileInfo';
 
 function CandidateProfile() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const { user } = useAuth();
     const isRecruiter = user?.role === 'RECRUITER';

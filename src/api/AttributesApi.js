@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 function AttributesApi({
   attributes,
@@ -8,6 +9,7 @@ function AttributesApi({
   onToggle,
   disabled = false,
 }) {
+  const { t } = useTranslation();
 
   const renderValues = (values) => {
     if (!values || !Array.isArray(values) || values.length === 0) {
@@ -20,7 +22,7 @@ function AttributesApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          Loading...
+          {t('loading')}
         </td>
       </tr>
     );
@@ -30,7 +32,7 @@ function AttributesApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-red-500 dark:text-red-400">
-          Error: {error}
+          {t('error')}: {error}
         </td>
       </tr>
     );
@@ -40,7 +42,7 @@ function AttributesApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          No attributes found
+          {t('noAttributes') || 'No attributes found'}
         </td>
       </tr>
     );

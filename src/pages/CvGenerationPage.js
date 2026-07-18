@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
@@ -18,6 +19,7 @@ import EditSkillModal from '../components/userAttribute/EditSkillModal';
 import EditProjectModal from '../components/projects/EditProjectModal';
 
 function CvGenerationPage() {
+    const { t } = useTranslation();
     const { id } = useParams();
     const [searchParams] = useSearchParams();
     const positionId = searchParams.get('positionId');
@@ -78,7 +80,7 @@ function CvGenerationPage() {
                 setIsEditSkillModalOpen(true);
             }
         } else {
-            alert('Please select exactly one skill to edit.');
+            alert(t('selectExactlyOne') || 'Please select exactly one skill to edit.');
         }
     };
 
@@ -123,7 +125,7 @@ function CvGenerationPage() {
                 setIsEditProjectModalOpen(true);
             }
         } else {
-            alert('Please select exactly one project to edit.');
+            alert(t('selectExactlyOne') || 'Please select exactly one project to edit.');
         }
     };
 
@@ -173,7 +175,7 @@ function CvGenerationPage() {
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500 dark:text-gray-400">Loading CV...</div>
+                    <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
                 </div>
                 <Footer />
             </div>
@@ -185,7 +187,7 @@ function CvGenerationPage() {
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
                 <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-red-500 dark:text-red-400">User not found</div>
+                    <div className="text-center text-red-500 dark:text-red-400">{t('userNotFound') || 'User not found'}</div>
                 </div>
                 <Footer />
             </div>
@@ -205,13 +207,13 @@ function CvGenerationPage() {
                                     onClick={handleCancelProfile}
                                     className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-md border border-gray-200 dark:border-gray-600"
                                 >
-                                    Cancel
+                                    {t('cancel')}
                                 </button>
                                 <button
                                     onClick={handleSaveProfile}
                                     className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors shadow-md"
                                 >
-                                    Save
+                                    {t('save')}
                                 </button>
                             </div>
                         )}
@@ -222,11 +224,11 @@ function CvGenerationPage() {
                                     onClick={handleInvite}
                                     className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition-colors shadow-md"
                                 >
-                                    Invite to interview
+                                    {t('inviteToInterview') || 'Invite to interview'}
                                 </button>
                                 {showInviteMessage && (
                                     <span className="text-sm text-green-600 dark:text-green-400 font-medium animate-pulse">
-                                        Invitation sent!
+                                        {t('invitationSent') || 'Invitation sent!'}
                                     </span>
                                 )}
                             </div>
@@ -247,7 +249,7 @@ function CvGenerationPage() {
                                             value={editForm.photoUrl || ''}
                                             onChange={(e) => changeField('photoUrl', e.target.value)}
                                             className="mt-2 w-full px-3 py-1 border border-white/30 rounded-md bg-white/20 text-white text-sm placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
-                                            placeholder="Photo URL"
+                                            placeholder={t('photoUrl') || 'Photo URL'}
                                         />
                                     </div>
                                     <div className="text-white w-full max-w-lg space-y-3">
@@ -256,14 +258,14 @@ function CvGenerationPage() {
                                                 type="text"
                                                 value={editForm.firstName || ''}
                                                 onChange={(e) => changeField('firstName', e.target.value)}
-                                                placeholder="First Name"
+                                                placeholder={t('firstName')}
                                                 className="flex-1 px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                             />
                                             <input
                                                 type="text"
                                                 value={editForm.lastName || ''}
                                                 onChange={(e) => changeField('lastName', e.target.value)}
-                                                placeholder="Last Name"
+                                                placeholder={t('lastName')}
                                                 className="flex-1 px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                             />
                                         </div>
@@ -271,28 +273,28 @@ function CvGenerationPage() {
                                             type="text"
                                             value={editForm.position || ''}
                                             onChange={(e) => changeField('position', e.target.value)}
-                                            placeholder="Position"
+                                            placeholder={t('position')}
                                             className="w-full px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                         />
                                         <input
                                             type="email"
                                             value={editForm.email || ''}
                                             onChange={(e) => changeField('email', e.target.value)}
-                                            placeholder="Email"
+                                            placeholder={t('email')}
                                             className="w-full px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                         />
                                         <input
                                             type="text"
                                             value={editForm.phone || ''}
                                             onChange={(e) => changeField('phone', e.target.value)}
-                                            placeholder="Phone"
+                                            placeholder={t('phone') || 'Phone'}
                                             className="w-full px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                         />
                                         <input
                                             type="text"
                                             value={editForm.address || ''}
                                             onChange={(e) => changeField('address', e.target.value)}
-                                            placeholder="Address"
+                                            placeholder={t('address') || 'Address'}
                                             className="w-full px-3 py-2 border border-white/30 rounded-md bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
                                         />
                                     </div>
@@ -302,7 +304,7 @@ function CvGenerationPage() {
                                             onChange={(e) => changeField('summary', e.target.value)}
                                             rows="4"
                                             className="w-full px-4 py-3 border border-white/30 rounded-lg bg-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
-                                            placeholder="Tell about yourself..."
+                                            placeholder={t('tellAboutYourself') || 'Tell about yourself...'}
                                         />
                                     </div>
                                 </div>
@@ -315,7 +317,7 @@ function CvGenerationPage() {
                                             onClick={startEdit}
                                             className="absolute top-4 right-4 z-10 bg-white dark:bg-gray-700 rounded-full p-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all border border-gray-200 dark:border-gray-600"
                                         >
-                                            <img src={editImg} alt="Edit" className="w-5 h-5" />
+                                            <img src={editImg} alt={t('edit')} className="w-5 h-5" />
                                         </button>
                                     )}
                                     <div className="flex flex-col items-center text-center gap-6">
@@ -343,14 +345,14 @@ function CvGenerationPage() {
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                                     </svg>
-                                                    {user.phone || 'Not provided'}
+                                                    {user.phone || t('notProvided') || 'Not provided'}
                                                 </span>
                                                 <span className="flex items-center gap-2">
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                                     </svg>
-                                                    {user.address || 'Not provided'}
+                                                    {user.address || t('notProvided') || 'Not provided'}
                                                 </span>
                                             </div>
                                         </div>
@@ -362,14 +364,14 @@ function CvGenerationPage() {
                                         <div className="mb-8">
                                             <div className="flex items-center gap-3 mb-4">
                                                 <span className="w-1 h-8 bg-purple-600 rounded-full"></span>
-                                                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Applied Position</h2>
+                                                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('appliedPosition') || 'Applied Position'}</h2>
                                             </div>
                                             <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-5 border border-purple-100 dark:border-purple-800">
                                                 <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{position.name}</h3>
                                                 <p className="text-gray-600 dark:text-gray-400 mt-2 text-base">{position.description}</p>
                                                 {positionAttributes.length > 0 && (
                                                     <div className="mt-3">
-                                                        <p className="text-base font-medium text-gray-700 dark:text-gray-300 text-left">Requirements:</p>
+                                                        <p className="text-base font-medium text-gray-700 dark:text-gray-300 text-left">{t('requirements')}:</p>
                                                         <div className="flex flex-col space-y-1 mt-1 text-left">
                                                             {positionAttributes.map((attr) => (
                                                                 <div key={attr.id} className="text-gray-700 dark:text-gray-400 text-sm text-left">
@@ -386,10 +388,10 @@ function CvGenerationPage() {
                                     <div className="mb-8">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">About Me</h2>
+                                            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('aboutMe') || 'About Me'}</h2>
                                         </div>
                                         <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 border border-gray-100 dark:border-gray-600">
-                                            {user.summary || 'No information about yourself has been added.'}
+                                            {user.summary || t('noInfo') || 'No information about yourself has been added.'}
                                         </p>
                                     </div>
 
@@ -398,7 +400,7 @@ function CvGenerationPage() {
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Position Requirements</h2>
+                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('positionRequirements') || 'Position Requirements'}</h2>
                                                 </div>
                                                 {!isRecruiter && (
                                                     <ToolBar
@@ -418,12 +420,12 @@ function CvGenerationPage() {
                                                         checked={allSkillsSelected}
                                                         onChange={handleSelectAllSkills}
                                                     />
-                                                    <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
+                                                    <label className="text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
                                                 </div>
                                             )}
 
                                             {positionAttributes.length === 0 ? (
-                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">No requirements for this position</p>
+                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">{t('noRequirements') || 'No requirements for this position'}</p>
                                             ) : (
                                                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-5 border border-gray-100 dark:border-gray-600 space-y-2">
                                                     {positionAttributes.map((attr) => {
@@ -445,7 +447,7 @@ function CvGenerationPage() {
                                                                         {attr.name}
                                                                     </span>
                                                                     {!hasSkill && (
-                                                                        <span className="text-xs text-red-500 dark:text-red-400 ml-1">(missing)</span>
+                                                                        <span className="text-xs text-red-500 dark:text-red-400 ml-1">{t('missing') || '(missing)'}</span>
                                                                     )}
                                                                 </div>
                                                                 <div className="flex items-center gap-2">
@@ -455,7 +457,7 @@ function CvGenerationPage() {
                                                                         </span>
                                                                     ) : (
                                                                         <span className="text-sm text-gray-400 dark:text-gray-500 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-600">
-                                                                            Not added
+                                                                            {t('notAdded') || 'Not added'}
                                                                         </span>
                                                                     )}
                                                                 </div>
@@ -470,7 +472,7 @@ function CvGenerationPage() {
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-1 h-8 bg-blue-600 rounded-full"></span>
-                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Projects</h2>
+                                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('projects')}</h2>
                                                 </div>
                                                 {!isRecruiter && (
                                                     <ToolBar
@@ -490,12 +492,12 @@ function CvGenerationPage() {
                                                         checked={allProjectsSelected}
                                                         onChange={handleSelectAllProjects}
                                                     />
-                                                    <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
+                                                    <label className="text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
                                                 </div>
                                             )}
 
                                             {projects.length === 0 ? (
-                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">No projects added yet</p>
+                                                <p className="text-gray-500 dark:text-gray-400 text-center py-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-600">{t('noProjects')}</p>
                                             ) : (
                                                 <div className="space-y-4">
                                                     {projects.map((project) => (
@@ -519,7 +521,7 @@ function CvGenerationPage() {
                                                                 )}
                                                             </div>
                                                             <p className="text-gray-600 dark:text-gray-400 text-sm mt-2 leading-relaxed ml-6">
-                                                                {project.description || 'No description provided'}
+                                                                {project.description || t('noDescription')}
                                                             </p>
                                                         </div>
                                                     ))}

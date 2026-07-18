@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import ToolBar from '../components/common/ToolBar';
@@ -15,6 +16,7 @@ import { useDuplicatePosition } from '../hooks/positions/useDuplicatePosition';
 import { useAuth } from '../hooks/useAuth';
 
 function PositionsTablePage() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const isAuthenticated = !!user;
   const isCandidate = user?.role === 'CANDIDATE';
@@ -111,7 +113,6 @@ function PositionsTablePage() {
       setDeleteModalOpen(false);
       setPendingDeleteIds([]);
     }
-    // Если ошибка - она покажется в тулбаре, модалка закроется
     setDeleteModalOpen(false);
     setPendingDeleteIds([]);
   };
@@ -145,7 +146,7 @@ function PositionsTablePage() {
       return (
         <tr>
           <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-            Loading...
+            {t('loading')}
           </td>
         </tr>
       );
@@ -155,7 +156,7 @@ function PositionsTablePage() {
       return (
         <tr>
           <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-red-500 dark:text-red-400">
-            Error: {error}
+            {t('error')}: {error}
           </td>
         </tr>
       );
@@ -165,7 +166,7 @@ function PositionsTablePage() {
       return (
         <tr>
           <td colSpan={isHomePage ? 3 : (isCandidate ? 3 : 4)} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-            No positions found
+            {t('noPositions') || 'No positions found'}
           </td>
         </tr>
       );
@@ -199,7 +200,7 @@ function PositionsTablePage() {
           {isHomePage ? (
             <div className="mb-6">
               <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
-                Available Jobs Today
+                {t('availableJobs')}
               </h1>
             </div>
           ) : (
@@ -220,8 +221,8 @@ function PositionsTablePage() {
               )}
               <input
                 type="text"
-                placeholder="Filter positions by name..."
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder={t('filterByName')}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
                 disabled={isEditing || isDeleting || isDuplicating}
@@ -246,13 +247,13 @@ function PositionsTablePage() {
                       </th>
                     )}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Name
+                      {t('name')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Description
+                      {t('description')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Tags
+                      {t('tags')}
                     </th>
                   </tr>
                 </thead>
@@ -268,8 +269,8 @@ function PositionsTablePage() {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Positions"
-        message={`Are you sure you want to delete ${pendingDeleteIds.length} position(s)?`}
+        title={t('deletePositions') || 'Delete Positions'}
+        message={`${t('confirmDelete') || 'Are you sure you want to delete'} ${pendingDeleteIds.length} ${t('positionPlural') || 'position(s)'}?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}

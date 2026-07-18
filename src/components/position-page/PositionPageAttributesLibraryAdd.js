@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PositionAttributesToolbar from '../positionAttribute/PositionAttributesToolbar';
 import ConfirmModal from '../common/ConfirmModal';
 import AddAttributeModal from '../positionAttribute/AddAttributeModal';
@@ -8,6 +9,7 @@ import { useRemovePositionAttribute } from '../../hooks/positionAttributes/useRe
 import { useAuth } from '../../hooks/useAuth';
 
 function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
+    const { t } = useTranslation();
     const { user } = useAuth();
     const isAuthenticated = !!user;
     
@@ -78,7 +80,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
     if (loading) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">Loading attributes...</div>
+                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
             </div>
         );
     }
@@ -86,7 +88,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
     if (error) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+                <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
             </div>
         );
     }
@@ -107,7 +109,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
 
             <div className="flex flex-col">
                 <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 text-left transition-colors">
-                    Requirements:
+                    {t('requirements')}:
                 </h2>
                 {isAuthenticated && !isCandidate && attributes.length > 0 && (
                     <div className="flex items-center gap-2 mb-4">
@@ -118,12 +120,12 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
                             onChange={handleSelectAll}
                             disabled={isRemoving}
                         />
-                        <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
+                        <label className="text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
                     </div>
                 )}
 
                 {attributes.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-center">No attributes assigned</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">{t('noAttributesAssigned') || 'No attributes assigned'}</p>
                 ) : (
                     <div className="flex flex-col space-y-2">
                         {attributes.map((attr) => (
@@ -157,8 +159,8 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
 
             <ConfirmModal
                 isOpen={deleteModalOpen}
-                title="Remove Attributes"
-                message={`Are you sure you want to remove ${pendingDeleteIds.length} attribute(s) from this position?`}
+                title={t('removeAttributes') || 'Remove Attributes'}
+                message={`${t('confirmRemoveAttributes') || 'Are you sure you want to remove'} ${pendingDeleteIds.length} ${t('attributePlural') || 'attribute(s)'} ${t('fromPosition') || 'from this position'}?`}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
                 isLoading={isRemoving}

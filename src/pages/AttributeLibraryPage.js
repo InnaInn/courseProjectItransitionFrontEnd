@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import ToolBar from '../components/common/ToolBar';
@@ -12,6 +13,7 @@ import { useCreateAttribute } from '../hooks/attributes/useCreateAttribute';
 import { useUpdateAttribute } from '../hooks/attributes/useUpdateAttribute';
 
 function AttributeLibraryPage() {
+  const { t } = useTranslation();
   const [filterText, setFilterText] = useState('');
   const { attributes, loading, error, refetch } = useAttributes(filterText);
   
@@ -34,7 +36,7 @@ function AttributeLibraryPage() {
         setEditingAttributeId(attr.id);
       }
     } else {
-      alert('Please select exactly one attribute to edit.');
+      alert(t('selectExactlyOne') || 'Please select exactly one attribute to edit.');
     }
   };
 
@@ -112,8 +114,8 @@ function AttributeLibraryPage() {
             />
             <input
               type="text"
-              placeholder="Filter attributes..."
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+              placeholder={t('filterAttributes') || 'Filter attributes...'}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
               disabled={isEditing || isDeleting}
@@ -135,16 +137,16 @@ function AttributeLibraryPage() {
                       />
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Category
+                      {t('category') || 'Category'}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Field Type
+                      {t('fieldType') || 'Field Type'}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Possible Values
+                      {t('possibleValues') || 'Possible Values'}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Name
+                      {t('name')}
                     </th>
                   </tr>
                 </thead>
@@ -167,8 +169,8 @@ function AttributeLibraryPage() {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Attributes"
-        message={`Are you sure you want to delete ${pendingDeleteIds.length} attribute(s)?`}
+        title={t('deleteAttributes') || 'Delete Attributes'}
+        message={`${t('confirmDelete') || 'Are you sure you want to delete'} ${pendingDeleteIds.length} ${t('attributePlural') || 'attribute(s)'}?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}

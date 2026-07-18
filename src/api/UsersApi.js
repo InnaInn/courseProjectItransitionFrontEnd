@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function UsersApi({
   users,
@@ -13,6 +14,8 @@ function UsersApi({
   editRoleValue,
   onRoleChange,
 }) {
+  const { t } = useTranslation();
+
   const getRoleName = (roleId) => {
     if (!roles || roles.length === 0) return roleId;
     const role = roles.find((r) => r.id === roleId);
@@ -23,7 +26,7 @@ function UsersApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          Loading...
+          {t('loading')}
         </td>
       </tr>
     );
@@ -33,7 +36,7 @@ function UsersApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-red-500 dark:text-red-400">
-          Error: {error}
+          {t('error')}: {error}
         </td>
       </tr>
     );
@@ -43,7 +46,7 @@ function UsersApi({
     return (
       <tr>
         <td colSpan="5" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          No users found
+          {t('noUsers') || 'No users found'}
         </td>
       </tr>
     );

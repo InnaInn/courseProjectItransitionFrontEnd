@@ -10,11 +10,14 @@ import PositionsTablePage from './pages/PositionsTablePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
+import './i18n';
 
 function App() {
   return (
     <div className="App">
       <ThemeProvider>
+          <LanguageProvider> 
         <BrowserRouter>
           <Routes>
 
@@ -34,6 +37,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
+          </LanguageProvider> 
       </ThemeProvider>
     </div>
   );

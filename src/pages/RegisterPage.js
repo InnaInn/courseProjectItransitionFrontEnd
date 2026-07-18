@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import { useRegister } from '../hooks/users/useRegister';
 
 function RegisterPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { register, isLoading, error } = useRegister();
 
@@ -30,12 +32,12 @@ function RegisterPage() {
 
   const validate = () => {
     const errors = {};
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) errors.lastName = 'Last name is required';
-    if (!formData.email.trim()) errors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = 'Email is invalid';
-    if (!formData.password) errors.password = 'Password is required';
-    else if (formData.password.length < 6) errors.password = 'Password must be at least 6 characters';
+    if (!formData.firstName.trim()) errors.firstName = t('firstNameRequired') || 'First name is required';
+    if (!formData.lastName.trim()) errors.lastName = t('lastNameRequired') || 'Last name is required';
+    if (!formData.email.trim()) errors.email = t('emailRequired') || 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = t('emailInvalid') || 'Email is invalid';
+    if (!formData.password) errors.password = t('passwordRequired') || 'Password is required';
+    else if (formData.password.length < 6) errors.password = t('passwordMinLength') || 'Password must be at least 6 characters';
     return errors;
   };
 
@@ -61,7 +63,7 @@ function RegisterPage() {
         <div className="max-w-3xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-colors">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">
-              Create New Account
+              {t('createAccount') || 'Create New Account'}
             </h2>
 
             {error && (
@@ -74,17 +76,17 @@ function RegisterPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    First Name *
+                    {t('firstName')} *
                   </label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
                       validationErrors.firstName ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
-                    placeholder="Enter first name"
+                    placeholder={t('enterFirstName') || 'Enter first name'}
                   />
                   {validationErrors.firstName && (
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.firstName}</p>
@@ -92,17 +94,17 @@ function RegisterPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Last Name *
+                    {t('lastName')} *
                   </label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
                       validationErrors.lastName ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                     }`}
-                    placeholder="Enter last name"
+                    placeholder={t('enterLastName') || 'Enter last name'}
                   />
                   {validationErrors.lastName && (
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.lastName}</p>
@@ -112,17 +114,17 @@ function RegisterPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Email *
+                  {t('email')} *
                 </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
                     validationErrors.email ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
-                  placeholder="Enter email"
+                  placeholder={t('email')}
                 />
                 {validationErrors.email && (
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.email}</p>
@@ -131,17 +133,17 @@ function RegisterPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Password *
+                  {t('password')} *
                 </label>
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
                     validationErrors.password ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
-                  placeholder="Enter password"
+                  placeholder={t('password')}
                 />
                 {validationErrors.password && (
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.password}</p>
@@ -150,12 +152,12 @@ function RegisterPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Role *
+                  {t('role') || 'Role'} *
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 cursor-default focus:outline-none transition-colors"
-                  value="Candidate"
+                  value={t('candidate') || 'Candidate'}
                   disabled
                 />
                 <input type="hidden" name="roleId" value="CANDIDATE" />
@@ -163,77 +165,77 @@ function RegisterPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Location
+                  {t('location') || 'Location'}
                 </label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-                  placeholder="City, Country"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  placeholder={t('enterLocation') || 'City, Country'}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Phone
+                  {t('phone') || 'Phone'}
                 </label>
                 <input
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                   placeholder="+1234567890"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Position
+                  {t('position')}
                 </label>
                 <input
                   type="text"
                   name="position"
                   value={formData.position}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-                  placeholder="e.g. Frontend Developer"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  placeholder={t('enterPosition') || 'e.g. Frontend Developer'}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Photo URL
+                  {t('photoUrl') || 'Photo URL'}
                 </label>
                 <input
                   type="text"
                   name="photoUrl"
                   value={formData.photoUrl}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                   placeholder="https://example.com/photo.jpg"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Summary
+                  {t('summary') || 'Summary'}
                 </label>
                 <textarea
                   name="summary"
                   value={formData.summary}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-                  placeholder="Tell about yourself..."
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  placeholder={t('tellAboutYourself') || 'Tell about yourself...'}
                 />
               </div>
 
               <div className="flex items-center justify-between pt-4">
                 <Link to="/login" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                  Already have an account? Login
+                  {t('alreadyHaveAccount') || 'Already have an account? Login'}
                 </Link>
                 <button
                   type="submit"
@@ -242,7 +244,7 @@ function RegisterPage() {
                     isLoading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                   }`}
                 >
-                  {isLoading ? 'Registering...' : 'Register'}
+                  {isLoading ? t('registering') || 'Registering...' : t('register')}
                 </button>
               </div>
             </form>

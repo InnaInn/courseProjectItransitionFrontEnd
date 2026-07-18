@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ToolBar from '../common/ToolBar';
 import ConfirmModal from '../common/ConfirmModal';
 import { usePositionUsers } from '../../hooks/userPositions/usePositionUsers';
 import { useDeleteUserPosition } from '../../hooks/userPositions/useDeleteUserPosition';
 
 function PositionPageCvCondidates({ positionId }) {
+  const { t } = useTranslation();
   const { candidates, loading, error, refetch } = usePositionUsers(positionId);
   const { deleteUserPosition, isDeleting, deleteError } = useDeleteUserPosition(refetch);
 
@@ -59,7 +61,7 @@ function PositionPageCvCondidates({ positionId }) {
   if (loading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-        <div className="text-center text-gray-500 dark:text-gray-400">Loading candidates...</div>
+        <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
       </div>
     );
   }
@@ -67,7 +69,7 @@ function PositionPageCvCondidates({ positionId }) {
   if (error) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-        <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+        <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
       </div>
     );
   }
@@ -87,7 +89,7 @@ function PositionPageCvCondidates({ positionId }) {
 
       <div className="flex flex-col">
         <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-4 text-left transition-colors">
-          Candidate responses
+          {t('candidateResponses') || 'Candidate responses'}
         </h2>
 
         {candidates.length > 0 && (
@@ -101,13 +103,13 @@ function PositionPageCvCondidates({ positionId }) {
               id="select-all-candidates"
             />
             <label htmlFor="select-all-candidates" className="text-sm text-gray-600 dark:text-gray-400">
-              Select all
+              {t('selectAll')}
             </label>
           </div>
         )}
 
         {candidates.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-center">No candidates yet</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center">{t('noCandidatesYet') || 'No candidates yet'}</p>
         ) : (
           <div className="flex flex-col space-y-2">
             {candidates.map((candidate) => (
@@ -136,8 +138,8 @@ function PositionPageCvCondidates({ positionId }) {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Remove Candidates"
-        message={`Are you sure you want to remove ${pendingDeleteIds.length} candidate(s) from this position?`}
+        title={t('removeCandidates') || 'Remove Candidates'}
+        message={`${t('confirmRemoveCandidates') || 'Are you sure you want to remove'} ${pendingDeleteIds.length} ${t('candidatePlural') || 'candidate(s)'} ${t('fromPosition') || 'from this position'}?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}

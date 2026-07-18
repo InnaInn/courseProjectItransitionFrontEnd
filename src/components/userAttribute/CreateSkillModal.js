@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 import { useAttributes } from '../../hooks/attributes/useAttributes';
 
@@ -10,6 +11,7 @@ const CreateSkillModal = ({
   createError,
   existingAttributes = [], 
 }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const { attributes, loading: attributesLoading } = useAttributes(searchTerm);
   
@@ -115,7 +117,7 @@ const CreateSkillModal = ({
     if (!selectedAttribute) {
       return (
         <div className="text-gray-400 dark:text-gray-500 text-sm italic">
-          Please select a skill first
+          {t('pleaseSelectSkill') || 'Please select a skill first'}
         </div>
       );
     }
@@ -132,7 +134,7 @@ const CreateSkillModal = ({
               onChange={handleCheckboxChange}
               className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
             />
-            <label className="text-sm text-gray-600 dark:text-gray-400">Enable this skill</label>
+            <label className="text-sm text-gray-600 dark:text-gray-400">{t('enableSkill') || 'Enable this skill'}</label>
           </div>
         );
 
@@ -145,7 +147,7 @@ const CreateSkillModal = ({
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-            placeholder="Enter number"
+            placeholder={t('enterNumber') || 'Enter number'}
           />
         );
 
@@ -177,7 +179,7 @@ const CreateSkillModal = ({
                 }));
               }}
               className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-              placeholder="Start date"
+              placeholder={t('startDate') || 'Start date'}
             />
             <input
               type="date"
@@ -191,7 +193,7 @@ const CreateSkillModal = ({
                 }));
               }}
               className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-              placeholder="End date"
+              placeholder={t('endDate') || 'End date'}
             />
           </div>
         );
@@ -212,7 +214,7 @@ const CreateSkillModal = ({
             required
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
           >
-            <option value="">Select option</option>
+            <option value="">{t('selectOption') || 'Select option'}</option>
             {options.map((opt, i) => (
               <option key={i} value={typeof opt === 'string' ? opt.trim() : opt}>
                 {typeof opt === 'string' ? opt.trim() : opt}
@@ -230,7 +232,7 @@ const CreateSkillModal = ({
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-            placeholder="Enter image URL"
+            placeholder={t('enterImageUrl') || 'Enter image URL'}
           />
         );
 
@@ -243,7 +245,7 @@ const CreateSkillModal = ({
             required
             rows="3"
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-            placeholder="Enter text"
+            placeholder={t('enterText') || 'Enter text'}
           />
         );
 
@@ -256,7 +258,7 @@ const CreateSkillModal = ({
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-            placeholder="Enter value"
+            placeholder={t('enterValue') || 'Enter value'}
           />
         );
     }
@@ -368,36 +370,36 @@ const CreateSkillModal = ({
     >
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md transition-colors">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 text-center">
-          Add New Skill
+          {t('addNewSkill') || 'Add New Skill'}
         </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Skill *
+              {t('skill') || 'Skill'} *
             </label>
             <Select
               options={options}
               value={selectedOption}
               onChange={handleSelectChange}
               onInputChange={handleInputChange}
-              placeholder="Type to search skill..."
+              placeholder={t('typeToSearch') || 'Type to search skill...'}
               isClearable
               isLoading={attributesLoading}
-              noOptionsMessage={() => 'No skills available'}
+              noOptionsMessage={() => t('noSkillsAvailable') || 'No skills available'}
               styles={typeof window !== 'undefined' && document.documentElement.classList.contains('dark') 
                 ? darkSelectStyles 
                 : customSelectStyles
               }
             />
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-              {options.length} skill(s) available
+              {options.length} {t('skillPlural') || 'skill(s)'} {t('available') || 'available'}
             </p>
           </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Value {selectedAttribute ? `(${selectedAttribute.type})` : ''}
+              {t('value') || 'Value'} {selectedAttribute ? `(${selectedAttribute.type})` : ''}
             </label>
             {renderValueInput()}
           </div>
@@ -413,14 +415,14 @@ const CreateSkillModal = ({
               disabled={isCreating}
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isCreating}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {isCreating ? 'Adding...' : 'Add Skill'}
+              {isCreating ? t('adding') || 'Adding...' : t('addSkill') || 'Add Skill'}
             </button>
           </div>
         </form>

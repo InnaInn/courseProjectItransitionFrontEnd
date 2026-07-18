@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 import { useAuth } from '../hooks/useAuth';
@@ -9,6 +10,7 @@ import { fetchWithSession } from '../hooks/useAuth';
 const API_URL = config.beURL + '/api';
 
 function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -39,7 +41,7 @@ function LoginPage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error('Invalid email or password');
+          throw new Error(t('invalidCredentials') || 'Invalid email or password');
         } else if (response.status === 400) {
           throw new Error(data.error || 'Please provide email and password');
         } else {
@@ -70,7 +72,7 @@ function LoginPage() {
         <div className="max-w-md mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-colors">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">
-              Welcome Back
+              {t('welcome')}
             </h2>
 
             {error && (
@@ -85,28 +87,28 @@ function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Email *
+                  {t('email')} *
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-                  placeholder="Enter your email"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  placeholder={t('email')}
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Password *
+                  {t('password')} *
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-                  placeholder="Enter your password"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                  placeholder={t('password')}
                   required
                 />
               </div>
@@ -118,13 +120,13 @@ function LoginPage() {
                   loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? t('loginButton') : t('login')}
               </button>
 
               <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                Don't have an account?{' '}
+                {t('noAccount')}{' '}
                 <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:underline">
-                  Sign up
+                  {t('signUp')}
                 </Link>
               </p>
             </form>

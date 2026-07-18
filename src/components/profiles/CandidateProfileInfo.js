@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ToolBar from '../common/ToolBar';
 import ConfirmModal from '../common/ConfirmModal';
 import CreateSkillModal from '../userAttribute/CreateSkillModal';
@@ -9,6 +10,7 @@ import { useCreateUserAttribute } from '../../hooks/userAttributes/useCreateUser
 import { useUpdateUserAttribute } from '../../hooks/userAttributes/useUpdateUserAttribute';
 
 function CandidateProfileInfo({ userId, isRecruiter = false }) {
+  const { t } = useTranslation();
   const { attributes, loading, error, refetch } = useUserAttributes(userId);
   const { deleteUserAttributes, isDeleting, deleteError } = useDeleteUserAttribute(refetch);
   const { createUserAttribute, isCreating, createError } = useCreateUserAttribute(refetch);
@@ -90,7 +92,7 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
   if (loading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
-        <div className="text-center text-gray-500 dark:text-gray-400">Loading skills...</div>
+        <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
       </div>
     );
   }
@@ -98,14 +100,13 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
   if (error) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
-        <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+        <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
       </div>
     );
   }
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl relative transition-colors">
-    
       {!isRecruiter && (
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <ToolBar
@@ -121,7 +122,7 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
 
       <div className="flex flex-col">
         <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 text-left transition-colors">
-          My Skills
+          {t('mySkills')}
         </h2>
         {!isRecruiter && attributes.length > 0 && (
           <div className="flex items-center gap-2 mb-4">
@@ -132,12 +133,12 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
               onChange={handleSelectAll}
               disabled={isDeleting}
             />
-            <label className="text-sm text-gray-600 dark:text-gray-400">Select all</label>
+            <label className="text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
           </div>
         )}
 
         {attributes.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400 text-center">No skills added yet</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center">{t('noSkills')}</p>
         ) : (
           <div className="flex flex-col space-y-2">
             {attributes.map((skill) => (
@@ -162,8 +163,8 @@ function CandidateProfileInfo({ userId, isRecruiter = false }) {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Skills"
-        message={`Are you sure you want to delete ${pendingDeleteIds.length} skill(s)?`}
+        title={t('deleteSkills') || 'Delete Skills'}
+        message={`${t('confirmDelete') || 'Are you sure you want to delete'} ${pendingDeleteIds.length} ${t('skillPlural') || 'skill(s)'}?`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={isDeleting}

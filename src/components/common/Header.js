@@ -5,12 +5,16 @@ import { fetchWithSession } from '../../hooks/useAuth';
 import { config } from '../../config';
 import logoImg from '../../images/logo.png';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 const API_URL = config.beURL + '/api';
 
 function Header() {
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { language, toggleLanguage } = useLanguage();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,7 +54,7 @@ function Header() {
     );
   };
 
-
+  // Переключатель темы
   const ThemeToggle = () => (
     <button
       onClick={toggleTheme}
@@ -69,6 +73,17 @@ function Header() {
     </button>
   );
 
+  // Переключатель языка
+  const LanguageToggle = () => (
+    <button
+      onClick={toggleLanguage}
+      className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
+      title={language === 'en' ? 'Switch to Russian' : 'Switch to English'}
+    >
+      {language === 'en' ? 'RU' : 'EN'}
+    </button>
+  );
+
   if (isPublicPage && !user) {
     return (
       <nav className="bg-gray-50 dark:bg-gray-800 shadow-sm py-5 transition-colors border-b border-gray-200 dark:border-gray-700">
@@ -77,22 +92,23 @@ function Header() {
             <a href="/" className="flex-shrink-0">
               <img src={logoImg} alt="Logo" className="inline-block align-top" style={{ height: '60px' }} />
             </a>
-
+            
             <div className="flex items-center gap-6">
               {!isHomePage && (
-                <Link
-                  to="/"
+                <Link 
+                  to="/" 
                   className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium text-base"
                 >
-                  Positions
+                  {t('positions')}
                 </Link>
               )}
+              <LanguageToggle />
               <ThemeToggle />
               <button
                 onClick={() => navigate('/login')}
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-md text-base font-medium hover:bg-blue-700 transition-colors"
               >
-                Login
+                {t('login')}
               </button>
             </div>
           </div>
@@ -106,8 +122,8 @@ function Header() {
       if (user.role === 'CANDIDATE') {
         return (
           <>
-            {renderLink(`/candidate-profile/${user.id}`, 'My Profile')}
-            {renderLink('/positions-table-page', 'Positions')}
+            {renderLink(`/candidate-profile/${user.id}`, t('myProfile'))}
+            {renderLink('/positions-table-page', t('positions'))}
           </>
         );
       }
@@ -117,7 +133,7 @@ function Header() {
           <>
             {renderLink('/attribute-library-page', 'Attribute Library')}
             {renderLink('/users-table-page', 'Users Table')}
-            {renderLink('/positions-table-page', 'Positions')}
+            {renderLink('/positions-table-page', t('positions'))}
           </>
         );
       }
@@ -126,7 +142,7 @@ function Header() {
         <>
           {renderLink('/users-table-page', 'Users Table')}
           {renderLink('/attribute-library-page', 'Attribute Library')}
-          {renderLink('/positions-table-page', 'Positions')}
+          {renderLink('/positions-table-page', t('positions'))}
         </>
       );
     };
@@ -146,6 +162,7 @@ function Header() {
             </div>
 
             <div className="flex items-center gap-4">
+              <LanguageToggle />
               <ThemeToggle />
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 {user.firstName} {user.lastName}
@@ -154,7 +171,7 @@ function Header() {
                 onClick={handleLogout}
                 className="bg-red-600 text-white px-5 py-2.5 rounded-md text-base font-medium hover:bg-red-700 transition-colors"
               >
-                Log Out
+                {t('logOut')}
               </button>
             </div>
           </div>

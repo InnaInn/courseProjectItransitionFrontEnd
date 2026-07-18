@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ToolBar from '../common/ToolBar';
 import ConfirmModal from '../common/ConfirmModal';
 import CreateProjectModal from './CreateProjectModal';
@@ -9,6 +10,7 @@ import { useUpdateProject } from '../../hooks/projects/useUpdateProject';
 import { useDeleteProject } from '../../hooks/projects/useDeleteProject';
 
 function CandidateProfileProjects({ userId, isRecruiter = false }) {
+    const { t } = useTranslation();
     const { projects, loading, error, refetch } = useProjects(userId);
     const [selectedIds, setSelectedIds] = useState([]);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -101,7 +103,7 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
     if (loading) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">Loading projects...</div>
+                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
             </div>
         );
     }
@@ -109,7 +111,7 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
     if (error) {
         return (
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
-                <div className="text-center text-red-500 dark:text-red-400">Error: {error}</div>
+                <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
             </div>
         );
     }
@@ -118,7 +120,9 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
             <div className="flex flex-col">
                 <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold transition-colors">My Projects</h2>
+                    <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold transition-colors">
+                        {t('myProjects')}
+                    </h2>
                     {!isRecruiter && (
                         <ToolBar
                             selectedCount={selectedIds.length}
@@ -141,14 +145,14 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                             id="select-all-projects"
                         />
                         <label htmlFor="select-all-projects" className="text-sm text-gray-600 dark:text-gray-400">
-                            Select all
+                            {t('selectAll')}
                         </label>
                     </div>
                 )}
 
                 {projects.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400 text-lg">No projects found</p>
+                        <p className="text-gray-500 dark:text-gray-400 text-lg">{t('noProjects')}</p>
                     </div>
                 ) : (
                     <div className="flex flex-col space-y-6">
@@ -179,7 +183,7 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                                             </span>
                                         </div>
                                         <p className="text-gray-600 dark:text-gray-300 text-lg text-justify leading-relaxed mb-3 transition-colors">
-                                            {project.description || 'No description provided'}
+                                            {project.description || t('noDescription') || 'No description provided'}
                                         </p>
                                         <div className="flex flex-wrap gap-2">
                                             {technologies.map((tech, index) => (
@@ -201,8 +205,8 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
 
             <ConfirmModal
                 isOpen={deleteModalOpen}
-                title="Delete Projects"
-                message={`Are you sure you want to delete ${pendingDeleteIds.length} project(s)?`}
+                title={t('deleteProjects') || 'Delete Projects'}
+                message={`${t('confirmDelete') || 'Are you sure you want to delete'} ${pendingDeleteIds.length} ${t('projectPlural') || 'project(s)'}?`}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
                 isLoading={isDeleting}

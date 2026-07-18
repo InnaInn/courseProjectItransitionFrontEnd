@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function PositionsApi({
   positions,
@@ -9,11 +10,13 @@ function PositionsApi({
   onToggle,
   disabled = false,
 }) {
+  const { t } = useTranslation();
+
   if (loading) {
     return (
       <tr>
         <td colSpan="4" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          Loading...
+          {t('loading')}
         </td>
       </tr>
     );
@@ -23,7 +26,7 @@ function PositionsApi({
     return (
       <tr>
         <td colSpan="4" className="px-6 py-4 text-center text-red-500 dark:text-red-400">
-          Error: {error}
+          {t('error')}: {error}
         </td>
       </tr>
     );
@@ -33,7 +36,7 @@ function PositionsApi({
     return (
       <tr>
         <td colSpan="4" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-          No positions found
+          {t('noPositions') || 'No positions found'}
         </td>
       </tr>
     );

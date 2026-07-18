@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import addImg from '../../images/addIcon.png';
 import deleteImg from '../../images/deleteIcon.png';
 
@@ -9,6 +10,7 @@ const PositionAttributesToolbar = ({
   isDeleting,
   deleteError,
 }) => {
+  const { t } = useTranslation();
   const isDeleteDisabled = selectedIds.length === 0 || isDeleting;
 
   return (
@@ -16,9 +18,9 @@ const PositionAttributesToolbar = ({
       <button
         onClick={onAdd}
         className="hover:opacity-70 transition-opacity"
-        title="Add attribute"
+        title={t('addAttribute') || 'Add attribute'}
       >
-        <img src={addImg} alt="Add" className="w-5 h-5" />
+        <img src={addImg} alt={t('add') || 'Add'} className="w-5 h-5" />
       </button>
 
       <button
@@ -27,9 +29,9 @@ const PositionAttributesToolbar = ({
         className={`hover:opacity-70 transition-opacity ${
           isDeleteDisabled ? 'opacity-50 cursor-not-allowed' : ''
         }`}
-        title="Delete selected attributes"
+        title={t('deleteSelectedAttributes') || 'Delete selected attributes'}
       >
-        <img src={deleteImg} alt="Delete" className="w-5 h-5" />
+        <img src={deleteImg} alt={t('delete') || 'Delete'} className="w-5 h-5" />
       </button>
 
       {deleteError && (

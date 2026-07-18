@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCategories } from '../../hooks/useCategories';
 import { ATTRIBUTE_TYPES } from '../../constants/attributeTypes';
 
@@ -10,7 +11,7 @@ const EditAttributeModal = ({
   isUpdating,
   updateError,
 }) => {
-
+  const { t } = useTranslation();
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
   const [formData, setFormData] = useState({
     categoryId: '',
@@ -74,24 +75,30 @@ const EditAttributeModal = ({
       onClick={handleOverlayClick}
     >
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md transition-colors">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Edit Attribute</h2>
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+          {t('editAttribute') || 'Edit Attribute'}
+        </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {t('category')} *
+            </label>
             {categoriesLoading ? (
-              <div className="text-sm text-gray-500 dark:text-gray-400">Loading categories...</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t('loading')}</div>
             ) : categoriesError ? (
-              <div className="text-sm text-red-500 dark:text-red-400">Error loading categories: {categoriesError}</div>
+              <div className="text-sm text-red-500 dark:text-red-400">
+                {t('errorLoadingCategories') || 'Error loading categories'}: {categoriesError}
+              </div>
             ) : (
               <select
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               >
-                <option value="">Select category</option>
+                <option value="">{t('selectCategory') || 'Select category'}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.value}
@@ -101,15 +108,17 @@ const EditAttributeModal = ({
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field Type *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {t('fieldType')} *
+            </label>
             <select
               name="type"
               value={formData.type}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
             >
-              <option value="">Select field type</option>
+              <option value="">{t('selectFieldType') || 'Select field type'}</option>
               {ATTRIBUTE_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
                   {type.label}
@@ -118,26 +127,30 @@ const EditAttributeModal = ({
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Possible Values</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {t('possibleValues')}
+            </label>
             <input
               type="text"
               name="values"
               value={formData.values}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-              placeholder="e.g. Junior, Middle, Senior"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+              placeholder={t('possibleValuesPlaceholder') || 'e.g. Junior, Middle, Senior'}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              {t('name')} *
+            </label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
-              placeholder="e.g. Java"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+              placeholder={t('attributeNamePlaceholder') || 'e.g. Java'}
             />
           </div>
 
@@ -152,14 +165,14 @@ const EditAttributeModal = ({
               disabled={isUpdating}
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isUpdating}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {isUpdating ? 'Saving...' : 'Save'}
+              {isUpdating ? t('saving') || 'Saving...' : t('save')}
             </button>
           </div>
         </form>
