@@ -51,17 +51,17 @@ const AddAttributeModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 dark:bg-opacity-60"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 dark:bg-opacity-60 p-3 sm:p-4"
       onClick={handleOverlayClick}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md transition-colors">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 text-center">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto transition-colors">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4 text-center">
           {t('addAttributeToPosition') || 'Add Attribute to Position'}
         </h2>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <div className="mb-3 sm:mb-4">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t('selectAttribute') || 'Select Attribute'} *
             </label>
             {attributesLoading ? (
@@ -75,7 +75,7 @@ const AddAttributeModal = ({
                 value={selectedAttributeId}
                 onChange={(e) => setSelectedAttributeId(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+                className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               >
                 <option value="">{t('selectAttribute') || 'Select attribute'}</option>
                 {availableAttributes.map((attr) => (
@@ -93,22 +93,22 @@ const AddAttributeModal = ({
           </div>
 
           {addError && (
-            <div className="mb-4 text-sm text-red-600 dark:text-red-400">{addError}</div>
+            <div className="mb-3 sm:mb-4 text-sm text-red-600 dark:text-red-400">{addError}</div>
           )}
 
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isAdding}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
             >
               {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={isAdding || !selectedAttributeId || !hasAvailableAttributes}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 text-sm sm:text-base font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isAdding ? t('adding') || 'Adding...' : t('add')}
             </button>

@@ -41,7 +41,7 @@ const ToolBar = ({
 
   if (isEditing) {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className={`flex flex-wrap items-center gap-2 sm:gap-3 ${className}`}>
         <button
           onClick={onSave}
           disabled={isSaving}
@@ -64,14 +64,14 @@ const ToolBar = ({
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex flex-wrap items-center gap-3 sm:gap-4 ${className}`}>
       {showAdd && (
         <button
           onClick={onAdd}
-          className="hover:opacity-70 transition-opacity"
+          className="hover:opacity-70 transition-opacity p-1"
           title={t('add') || 'Add new'}
         >
-          <img src={addImg} alt={t('add') || 'Add'} className="w-5 h-5" />
+          <img src={addImg} alt={t('add') || 'Add'} className="w-6 h-6" />
         </button>
       )}
 
@@ -79,12 +79,12 @@ const ToolBar = ({
         <button
           onClick={onEdit}
           disabled={isEditDisabled}
-          className={`hover:opacity-70 transition-opacity ${
+          className={`hover:opacity-70 transition-opacity p-1 ${
             isEditDisabled ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           title={t('edit') || 'Edit selected'}
         >
-          <img src={editImg} alt={t('edit') || 'Edit'} className="w-5 h-5" />
+          <img src={editImg} alt={t('edit') || 'Edit'} className="w-6 h-6" />
         </button>
       )}
 
@@ -92,12 +92,12 @@ const ToolBar = ({
         <button
           onClick={onDuplicate}
           disabled={isDuplicateDisabled}
-          className={`hover:opacity-70 transition-opacity ${
+          className={`hover:opacity-70 transition-opacity p-1 ${
             isDuplicateDisabled ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           title={t('duplicate') || 'Duplicate selected'}
         >
-          <img src={duplicateImg} alt={t('duplicate') || 'Duplicate'} className="w-5 h-5" />
+          <img src={duplicateImg} alt={t('duplicate') || 'Duplicate'} className="w-6 h-6" />
         </button>
       )}
 
@@ -105,12 +105,12 @@ const ToolBar = ({
         <button
           onClick={onDelete}
           disabled={isDeleteDisabled}
-          className={`hover:opacity-70 transition-opacity ${
+          className={`hover:opacity-70 transition-opacity p-1 ${
             isDeleteDisabled ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           title={t('delete') || 'Delete selected'}
         >
-          <img src={deleteImg} alt={t('delete') || 'Delete'} className="w-5 h-5" />
+          <img src={deleteImg} alt={t('delete') || 'Delete'} className="w-6 h-6" />
         </button>
       )}
       
@@ -123,11 +123,11 @@ const ToolBar = ({
       )}
 
       {showFilter && (
-        <div className="ml-4">
+        <div className="ml-0 sm:ml-4 w-full sm:w-auto">
           <input
             type="text"
             placeholder={filterPlaceholder}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+            className="w-full sm:w-48 lg:w-64 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             value={filterValue}
             onChange={(e) => onFilterChange(e.target.value)}
             disabled={filterDisabled}

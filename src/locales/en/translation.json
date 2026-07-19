@@ -165,5 +165,11 @@
     "addSkill": "Add Skill",
     "editSkill": "Edit Skill",
     "noSkillsFound": "No skills found",
-    "found": "found"
+    "found": "found",
+    "invalidCredentials": "Incorrect login or password",
+    "userAlreadyExists": "User with this email already exists",
+    "registrationFailed": "Registration failed. Please try again.",
+    "attributeLibrary": "Attribute Library",
+    "usersTable": "Users Table",
+    "projects": "Projects"
 }

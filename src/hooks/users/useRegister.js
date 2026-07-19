@@ -21,12 +21,28 @@ export const useRegister = () => {
         body: JSON.stringify(userData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData || 'Registration failed');
+  
+      let data = null;
+      let errorMessage = 'Registration failed';
+      try {
+        data = await response.json();
+      } catch (parseError) {
+   
+        const text = await response.text();
+        errorMessage = text || errorMessage;
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        if (data && data.error) {
+          errorMessage = data.error;
+        }
+        
+        if (response.status === 409) {
+          throw new Error('USER_ALREADY_EXISTS');
+        }
+        throw new Error(errorMessage);
+      }
+
       return data;
     } catch (err) {
       setError(err.message);

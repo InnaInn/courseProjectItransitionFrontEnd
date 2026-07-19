@@ -165,5 +165,12 @@
     "addSkill": "Добавить навык",
     "editSkill": "Редактировать навык",
     "noSkillsFound": "Навыки не найдены",
-    "found": "найдено"
+    "found": "найдено",
+    "invalidCredentials": "Неверный логин или пароль",
+    "userAlreadyExists": "Пользователь с таким email уже существует",
+    "registrationFailed": "Ошибка регистрации. Попробуйте снова.",
+    "attributeLibrary": "Библиотека атрибутов",
+    "usersTable": "Таблица пользователей",
+    "projects": "Проекты"
+    
 }

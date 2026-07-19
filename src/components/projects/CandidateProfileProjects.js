@@ -60,7 +60,7 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                 setEditingProjectId(project.id);
             }
         } else {
-            alert('Please select exactly one project to edit.');
+            alert(t('selectExactlyOne') || 'Please select exactly one project to edit.');
         }
     };
 
@@ -102,25 +102,25 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
 
     if (loading) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl w-full transition-colors">
+                <div className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base">{t('loading')}</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
-                <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl w-full transition-colors">
+                <div className="text-center text-red-500 dark:text-red-400 text-sm sm:text-base">{t('error')}: {error}</div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl w-full transition-colors">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl w-full transition-colors">
             <div className="flex flex-col">
                 <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold transition-colors">
+                    <h2 className="text-gray-800 dark:text-gray-100 text-xl sm:text-2xl font-bold transition-colors">
                         {t('myProjects')}
                     </h2>
                     {!isRecruiter && (
@@ -135,7 +135,7 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                     )}
                 </div>
                 {!isRecruiter && projects.length > 0 && (
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-3 sm:mb-4">
                         <input
                             type="checkbox"
                             className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
@@ -144,22 +144,22 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                             disabled={isEditing || isDeleting}
                             id="select-all-projects"
                         />
-                        <label htmlFor="select-all-projects" className="text-sm text-gray-600 dark:text-gray-400">
+                        <label htmlFor="select-all-projects" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                             {t('selectAll')}
                         </label>
                     </div>
                 )}
 
                 {projects.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-8">
-                        <p className="text-gray-500 dark:text-gray-400 text-lg">{t('noProjects')}</p>
+                    <div className="flex flex-col items-center justify-center py-6 sm:py-8">
+                        <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base md:text-lg">{t('noProjects')}</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col space-y-6">
+                    <div className="flex flex-col space-y-4 sm:space-y-6">
                         {projects.map((project) => {
                             const technologies = getTechnologies(project.id);
                             return (
-                                <div key={project.id} className="border-b border-gray-100 dark:border-gray-600 last:border-b-0 pb-4 last:pb-0 flex items-start gap-3 transition-colors">
+                                <div key={project.id} className="border-b border-gray-100 dark:border-gray-600 last:border-b-0 pb-3 sm:pb-4 last:pb-0 flex items-start gap-2 sm:gap-3 transition-colors">
                                     {!isRecruiter && (
                                         <div className="pt-1">
                                             <input
@@ -172,24 +172,24 @@ function CandidateProfileProjects({ userId, isRecruiter = false }) {
                                         </div>
                                     )}
                                     <div className="flex-1">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <h3 className="text-gray-800 dark:text-gray-100 text-xl font-bold transition-colors">
+                                        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2">
+                                            <h3 className="text-gray-800 dark:text-gray-100 text-base sm:text-xl font-bold transition-colors">
                                                 {project.name}
                                             </h3>
-                                            <span className="text-gray-500 dark:text-gray-400 text-base whitespace-nowrap ml-4 transition-colors">
+                                            <span className="text-gray-500 dark:text-gray-400 text-xs sm:text-base whitespace-nowrap sm:ml-4">
                                                 {project.startDate && project.endDate
                                                     ? `${project.startDate} - ${project.endDate}`
                                                     : project.startDate || project.endDate || ''}
                                             </span>
                                         </div>
-                                        <p className="text-gray-600 dark:text-gray-300 text-lg text-justify leading-relaxed mb-3 transition-colors">
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base md:text-lg text-justify leading-relaxed mb-3 transition-colors">
                                             {project.description || t('noDescription') || 'No description provided'}
                                         </p>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                                             {technologies.map((tech, index) => (
                                                 <span
                                                     key={index}
-                                                    className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-700 transition-colors"
+                                                    className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md text-xs sm:text-sm font-medium border border-blue-200 dark:border-blue-700 transition-colors"
                                                 >
                                                     {tech}
                                                 </span>

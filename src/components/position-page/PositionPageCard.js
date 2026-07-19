@@ -15,19 +15,19 @@ function PositionPageCard({
     onCancel,
     isCandidate = false,
     hasApplied = false,
-    refetchUserPositions = () => {},
+    refetchUserPositions = () => { },
 }) {
     const { t } = useTranslation();
     const { user } = useAuth();
     const { applyToPosition, isApplying, applyError } = useApplyToPosition(refetchUserPositions);
     const [localApplied, setLocalApplied] = useState(false);
-    
+
     const isAuthenticated = !!user;
 
     if (!position) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base">{t('loading')}</div>
             </div>
         );
     }
@@ -49,54 +49,54 @@ function PositionPageCard({
 
     if (isEditing) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="flex flex-col space-y-4">
-                    <div className="flex items-baseline gap-3">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap min-w-[100px]">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="flex flex-col space-y-3 sm:space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
+                        <span className="text-gray-600 dark:text-gray-400 font-medium text-base sm:text-lg whitespace-nowrap min-w-[80px] sm:min-w-[100px]">
                             {t('name')} *
                         </span>
                         <input
                             type="text"
                             value={editForm.name || ''}
                             onChange={(e) => changeField('name', e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                            className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             placeholder={t('enterPositionName') || 'Enter position name'}
                         />
                     </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap min-w-[100px] pt-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
+                        <span className="text-gray-600 dark:text-gray-400 font-medium text-base sm:text-lg whitespace-nowrap min-w-[80px] sm:min-w-[100px] pt-0 sm:pt-2">
                             {t('description')}
                         </span>
                         <textarea
                             value={editForm.description || ''}
                             onChange={(e) => changeField('description', e.target.value)}
                             rows="4"
-                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                            className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             placeholder={t('enterDescription') || 'Enter description'}
                         />
                     </div>
-                    <div className="flex items-baseline gap-3">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium text-lg whitespace-nowrap min-w-[100px]">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3">
+                        <span className="text-gray-600 dark:text-gray-400 font-medium text-base sm:text-lg whitespace-nowrap min-w-[80px] sm:min-w-[100px]">
                             {t('tags')}
                         </span>
                         <input
                             type="text"
                             value={editForm.tags || ''}
                             onChange={(e) => changeField('tags', e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                            className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                             placeholder={t('enterTags') || 'Enter tags separated by commas'}
                         />
                     </div>
-                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
+                    <div className="flex flex-wrap justify-end gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-600">
                         <button
                             onClick={onCancel}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                         >
                             {t('cancel')}
                         </button>
                         <button
                             onClick={onSave}
-                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
                         >
                             {t('save')}
                         </button>
@@ -107,51 +107,50 @@ function PositionPageCard({
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl mx-auto relative transition-colors">
             {isAuthenticated && (
-                <div className="absolute top-4 right-4 flex items-center gap-2">
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-2">
                     {isCandidate ? (
                         <button
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                isApplied || isApplying
+                            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${isApplied || isApplying
                                     ? 'bg-gray-400 dark:bg-gray-600 text-white cursor-not-allowed'
                                     : 'bg-green-600 text-white hover:bg-green-700'
-                            }`}
+                                }`}
                             onClick={handleApply}
                             disabled={isApplied || isApplying}
                         >
                             {isApplying ? t('loading') : isApplied ? t('applied') : t('apply')}
                         </button>
                     ) : (
-                        <button onClick={startEdit} className="hover:opacity-70 transition-opacity">
-                            <img src={editImg} alt={t('edit')} className="w-5 h-5" />
+                        <button onClick={startEdit} className="hover:opacity-70 transition-opacity p-1">
+                            <img src={editImg} alt={t('edit')} className="w-5 h-5 sm:w-6 sm:h-6" />
                         </button>
                     )}
                 </div>
             )}
             <div className="flex flex-col">
-                <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 transition-colors">
+                <h2 className="text-gray-800 dark:text-gray-100 text-xl sm:text-2xl font-bold mb-2 transition-colors">
                     {position.name || t('noData')}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300 text-lg text-justify leading-relaxed mb-3 transition-colors">
+                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-lg text-justify leading-relaxed mb-3 transition-colors">
                     {position.description || t('noDescription') || 'No description provided'}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {tags.length > 0 ? (
                         tags.map((tag, index) => (
                             <span
                                 key={index}
-                                className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-700 transition-colors"
+                                className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md text-xs sm:text-sm font-medium border border-blue-200 dark:border-blue-700 transition-colors"
                             >
                                 {tag}
                             </span>
                         ))
                     ) : (
-                        <span className="text-gray-400 dark:text-gray-500 text-sm">N/A</span>
+                        <span className="text-gray-400 dark:text-gray-500 text-xs sm:text-sm">N/A</span>
                     )}
                 </div>
                 {applyError && (
-                    <div className="mt-2 text-sm text-red-600 dark:text-red-400">{applyError}</div>
+                    <div className="mt-2 text-xs sm:text-sm text-red-600 dark:text-red-400">{applyError}</div>
                 )}
             </div>
         </div>

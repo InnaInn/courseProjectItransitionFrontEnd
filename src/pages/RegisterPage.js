@@ -8,7 +8,7 @@ import { useRegister } from '../hooks/users/useRegister';
 function RegisterPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { register, isLoading, error } = useRegister();
+  const { register, isLoading } = useRegister();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -23,11 +23,13 @@ function RegisterPage() {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [serverError, setServerError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setValidationErrors((prev) => ({ ...prev, [name]: '' }));
+    setServerError(''); // сбрасываем ошибку при вводе
   };
 
   const validate = () => {
@@ -43,6 +45,7 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError('');
     const errors = validate();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -53,6 +56,12 @@ function RegisterPage() {
       await register(formData);
       navigate('/login');
     } catch (err) {
+      // Обработка ошибки от сервера
+      if (err.message === 'USER_ALREADY_EXISTS') {
+        setServerError(t('userAlreadyExists') || 'User with this email already exists');
+      } else {
+        setServerError(err.message || t('registrationFailed') || 'Registration failed. Please try again.');
+      }
     }
   };
 
@@ -66,13 +75,14 @@ function RegisterPage() {
               {t('createAccount') || 'Create New Account'}
             </h2>
 
-            {error && (
+            {serverError && (
               <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-400 rounded-md">
-                {error}
+                {serverError}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* ... остальные поля без изменений ... */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

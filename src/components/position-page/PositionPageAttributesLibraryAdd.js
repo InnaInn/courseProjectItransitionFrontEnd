@@ -79,24 +79,24 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
 
     if (loading) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base">{t('loading')}</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
-                <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 max-w-xl mx-auto relative transition-colors">
+                <div className="text-center text-red-500 dark:text-red-400 text-sm sm:text-base">{t('error')}: {error}</div>
             </div>
         );
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-xl mx-auto relative transition-colors">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 max-w-xl mx-auto relative transition-colors">
             {isAuthenticated && !isCandidate && (
-                <div className="absolute top-4 right-4 flex items-center gap-2">
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-2">
                     <PositionAttributesToolbar
                         selectedIds={selectedIds}
                         onAdd={handleOpenAddModal}
@@ -108,11 +108,11 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
             )}
 
             <div className="flex flex-col">
-                <h2 className="text-gray-800 dark:text-gray-100 text-2xl font-bold mb-2 text-left transition-colors">
+                <h2 className="text-gray-800 dark:text-gray-100 text-xl sm:text-2xl font-bold mb-2 text-left transition-colors">
                     {t('requirements')}:
                 </h2>
                 {isAuthenticated && !isCandidate && attributes.length > 0 && (
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-3 sm:mb-4">
                         <input
                             type="checkbox"
                             className="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-500 rounded focus:ring-blue-500 dark:bg-gray-600"
@@ -120,14 +120,14 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
                             onChange={handleSelectAll}
                             disabled={isRemoving}
                         />
-                        <label className="text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
+                        <label className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('selectAll')}</label>
                     </div>
                 )}
 
                 {attributes.length === 0 ? (
-                    <p className="text-gray-500 dark:text-gray-400 text-center">{t('noAttributesAssigned') || 'No attributes assigned'}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-center text-sm sm:text-base">{t('noAttributesAssigned') || 'No attributes assigned'}</p>
                 ) : (
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-2 sm:space-y-3">
                         {attributes.map((attr) => (
                             <div key={attr.id} className="flex items-center gap-3">
                                 {isAuthenticated && !isCandidate && (
@@ -139,7 +139,7 @@ function PositionPageAttributesLibraryAdd({ positionId, isCandidate = false }) {
                                         disabled={isRemoving}
                                     />
                                 )}
-                                <span className="text-gray-700 dark:text-gray-300 text-lg transition-colors">
+                                <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-lg transition-colors">
                                     {attr.name}
                                 </span>
                             </div>

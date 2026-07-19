@@ -19,8 +19,9 @@ function CandidateProfile() {
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
             <Header />
             <div className="flex-grow container mx-auto px-4 py-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
-                    <div className="flex flex-col space-y-6">
+                <div className="max-w-7xl mx-auto flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:gap-0">
+                
+                    <div className="flex flex-col gap-6">
                         <CandidateProfileMe
                             userId={id}
                             isRecruiter={isRecruiter}
@@ -30,7 +31,9 @@ function CandidateProfile() {
                             isRecruiter={isRecruiter}
                         />
                     </div>
-                    <div className="flex flex-col space-y-6">
+
+                   
+                    <div className="flex flex-col gap-6">
                         <CandidateProfileInfo
                             userId={id}
                             isRecruiter={isRecruiter}

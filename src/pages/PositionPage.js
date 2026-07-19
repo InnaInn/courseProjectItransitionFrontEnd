@@ -52,8 +52,8 @@ function PositionPage() {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
-                <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500 dark:text-gray-400">{t('loading')}</div>
+                <div className="flex-grow container mx-auto px-2 sm:px-4 py-3 sm:py-6">
+                    <div className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base">{t('loading')}</div>
                 </div>
                 <Footer />
             </div>
@@ -64,8 +64,8 @@ function PositionPage() {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
-                <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-red-500 dark:text-red-400">{t('error')}: {error}</div>
+                <div className="flex-grow container mx-auto px-2 sm:px-4 py-3 sm:py-6">
+                    <div className="text-center text-red-500 dark:text-red-400 text-sm sm:text-base">{t('error')}: {error}</div>
                 </div>
                 <Footer />
             </div>
@@ -76,8 +76,8 @@ function PositionPage() {
         return (
             <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
                 <Header />
-                <div className="flex-grow container mx-auto px-4 py-6">
-                    <div className="text-center text-gray-500 dark:text-gray-400">{t('positionNotFound') || 'Position not found'}</div>
+                <div className="flex-grow container mx-auto px-2 sm:px-4 py-3 sm:py-6">
+                    <div className="text-center text-gray-500 dark:text-gray-400 text-sm sm:text-base">{t('positionNotFound') || 'Position not found'}</div>
                 </div>
                 <Footer />
             </div>
@@ -87,10 +87,10 @@ function PositionPage() {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col transition-colors">
             <Header />
-            <div className="flex-grow container mx-auto px-4 py-6">
+            <div className="flex-grow container mx-auto px-2 sm:px-4 py-3 sm:py-6">
                 {showCandidatesList ? (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-w-7xl mx-auto">
-                        <div className="flex flex-col space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 max-w-7xl mx-auto">
+                        <div className="flex flex-col space-y-4 sm:space-y-6">
                             <div className="flex-1">
                                 <PositionPageCard
                                     position={position}
@@ -112,17 +112,17 @@ function PositionPage() {
                                 />
                             </div>
                         </div>
-                        <div className="flex flex-col space-y-6">
+                        <div className="flex flex-col space-y-4 sm:space-y-6">
                             <div className="flex-1">
                                 <PositionPageCvCondidates positionId={id} />
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-6">
+                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-4 sm:space-y-6">
                         {!isAuthenticated && (
-                            <div className="w-full max-w-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 text-center transition-colors">
-                                <p className="text-blue-700 dark:text-blue-300 text-base">
+                            <div className="w-full max-w-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-3 sm:p-4 text-center transition-colors">
+                                <p className="text-blue-700 dark:text-blue-300 text-sm sm:text-base">
                                     {t('toApply')}{' '}
                                     <Link to="/register" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                                         {t('register')}
