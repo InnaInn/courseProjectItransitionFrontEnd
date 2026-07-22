@@ -56,7 +56,6 @@ function RegisterPage() {
       await register(formData);
       navigate('/login');
     } catch (err) {
-      // Обработка ошибки от сервера
       if (err.message === 'USER_ALREADY_EXISTS') {
         setServerError(t('userAlreadyExists') || 'User with this email already exists');
       } else {
@@ -82,7 +81,6 @@ function RegisterPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* ... остальные поля без изменений ... */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

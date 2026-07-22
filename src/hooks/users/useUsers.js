@@ -33,5 +33,5 @@ export const useUsers = (userPrefix = '') => {
     fetchUsers();
   }, [userPrefix]); 
 
-  return { users, loading, error, refetch: fetchUsers };
+  return { users, loading, error, setUsers, refetch: fetchUsers };
 };
